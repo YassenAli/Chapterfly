@@ -11,7 +11,6 @@ def view(request):
         title = request.GET['search-name']
         if title:
             search = search.filter(name__icontains=title)
-            # search = Book.objects.filter(name=title)
         
     context = {
         'category': Category.objects.all(),
@@ -39,15 +38,12 @@ def add_book(request):
     return render(request, 'pages/add_book.html', context)
 
 def cart(request):
-    valid = False
     if request.method == 'POST':
         form = CheckoutForm(request.POST)
         if form.is_valid():
-            # return redirect('account')
-            valid = True
+            return redirect('account')
     context = {
         'form': CheckoutForm(),
-        'is_form_valid': valid,
     }
     return render(request, 'pages/cart.html', context)
 
