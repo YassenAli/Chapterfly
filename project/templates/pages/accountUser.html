@@ -38,13 +38,10 @@
 <div class="container" id="bookshelf">
     <button id="log-out" onclick="logout()">Log Out</button>
 </div>
-{% endblock content %}
-
-{% block extra_scripts %}
-{% comment %}<script src="{% static 'javascript/account.js' %}"></script>
+<script src="{% static 'javascript/account.js' %}"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         getPhoto();
     });
-</script>{% endcomment %}
-{% endblock extra_scripts %}
+</script>
+{% endblock content %}
