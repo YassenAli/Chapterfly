@@ -2,16 +2,23 @@
 
 {% load static %}
 
-{% block content %}
-    <title>Add a Book</title>
+{% block style %}
     <link rel="stylesheet" href="{% static 'styles/add_book.css' %}" />
+{% endblock style %}
+
+{% block title %}
+    Add Book
+{% endblock title %}
+
+
+{% block content %}
     <br />
-    <!-- Add new books form -->
+    {% comment %} Add new books form {% endcomment %}
     <h2 class="main-title">Add New Book</h2>
     <form class="AddingBook" method="POST" enctype="multipart/form-data">
       {% csrf_token %}
       {{form}}
-      <!-- <label for="bookId">Book ID:</label>
+      {% comment %}  <label for="bookId">Book ID:</label>
       <input type="text" id="bookId" name="bookId" />
       <br />
       <label for="bookName">Book Name:</label>
@@ -31,7 +38,7 @@
         id="description"
         name="description"
         class="description"
-      ></textarea> -->
+      ></textarea> {% endcomment %}
       <br />
       <button type="submit" class="AddingBookBtn" id="AddingBookBtn" name="add_book">
         Add Book
@@ -46,5 +53,4 @@
       <button type="submit" class="AddingBookBtn" name="add_category">
         Save</button>
     </form>
-    <!-- <script src="{% static 'javascript/add_book.js' %}"></script> -->
 {% endblock content %}
