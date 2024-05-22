@@ -25,6 +25,53 @@ Chapterfly - {{book.name}}
   </button>
     {% endif %}
 
+    <form id="love-form" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="book-id" value="{{ book.id }}">
+      <input type="hidden" name="add-to-wishlist" value="true">    
+      <button id="love-button" onclick="addLove(event)">Love</button>
+    </form>
+
+    <a href="{% url 'view' %}" class="back">Back to Books</a>
+    
     <script src="{% static 'javascript/cart.js' %}"></script>
+    <script >
+      function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    
+    function addLove(event) {
+      event.preventDefault();
+      var bookId = document.querySelector('#love-form input[name="book-id"]').value;
+  
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+          if (this.readyState === 4 && this.status === 200) {
+              var response = JSON.parse(this.responseText);
+              if (response.status === 'success') {
+                document.getElementById('love-button').innerText = 'Loved';
+                alert('Added to your loved books');
+              } else if (response.status === 'already_in_wishlist') {
+                  alert('This book is already in your loved books');
+              }
+          }
+      };
+      xhttp.open("POST", "/add_love/", true);
+      xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhttp.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));  // Django requires this for POST requests
+      xhttp.send("book-id=" + bookId);
+  }
+    </script>
     </div>
 {% endblock content %}
