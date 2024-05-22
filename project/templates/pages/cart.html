@@ -2,18 +2,21 @@
 
 {% load static %}
 
-{% block content %}
-{% comment %}Style sheet {% endcomment %}
+{% block style %}
 <link rel="stylesheet" href="{% static 'styles/cart.css' %}"/>
+{% endblock %}
 
+{% block title %}
+My Cart
+{% endblock %}
+
+{% block content %}
 <div>
     <br>
     <br>
 
     <div class="main-container container">
         <div class="row cart">
-            {% comment %}::before {% endcomment %}
-            {% comment %}<form action="" method=""> {% endcomment %}
             <input type="hidden" name="_token">
             <div id="content" class="col-sm-12">
                 <h2 class="title main-title">Books Cart</h2>
@@ -22,7 +25,6 @@
                     <p class="empty">Your books cart is empty!</p>
                 </div>
                 <div class="row">
-                    {% comment %}::before {% endcomment %}
                     <div class="col-sm-4 col-sm-offset-8">
                         <table class="table table-bordered">
                             <tbody>
@@ -45,22 +47,11 @@
                             </tbody>
                         </table>
                     </div>
-                    {% comment %}::after {% endcomment %}
                 </div>
-                {% comment %}<div class="buttons" id="footer_cart">
-                    <div class="pull-left">
-                        <a href="main.html" class="btn btn-primary">Back to Home</a>
-                    </div>
-                    <div class="pull-right">
-                        <button class="btn btn-checkout pull-right" onclick="checkout()">Checkout</button>
-                    </div>
-                </div> {% endcomment %}
             </div>
-            {% comment %}</form> {% endcomment %}
-            {% comment %}::after {% endcomment %}
         </div>
-    {% comment %}::after {% endcomment %}
-    {% comment %}checkout {% endcomment %}
+
+        {% comment %}checkout {% endcomment %}
         <div class="checkout">
             <div class="col-lg-5">
 
@@ -82,15 +73,11 @@
                         <form class="mt-4" method="POST" id="checkout-form">
                             {% csrf_token %}
                             <div data-mdb-input-init class="form-outline form-white mb-4">
-{% comment %}                               <input type="text" id="typeName" class="form-control form-control-lg" size="17"{% endcomment %}
-{% comment %}                                      placeholder="Cardholder's Name" required/>{% endcomment %}
                                 {{ form.cardholder_name }}
                                 <label class="form-label" for="typeName">Cardholder's Name</label>
                             </div>
 
                             <div data-mdb-input-init class="form-outline form-white mb-4">
-{% comment %}                               <input type="text" id="typeTextCardnum" class="form-control form-control-lg" size="17"{% endcomment %}
-{% comment %}                               placeholder="1234 5678 9012 3457" minlength="19" maxlength="19" required/>{% endcomment %}
                                 {{ form.card_number }}
                                 <label class="form-label" for="typeTextCardnum">Card Number</label>
                             </div>
@@ -98,9 +85,6 @@
                             <div class="row mb-4">
                                 <div class="col-md-6">
                                     <div data-mdb-input-init class="form-outline form-white">
-                                        {% comment %} <input type="text" id="typeExp" class="form-control form-control-lg"
-                                               placeholder="MM/YYYY" size="7" minlength="7" maxlength="7"
-                                               required/> {% endcomment %}
                                         {{ form.expiration_date }}
                                         <label class="form-label" for="typeExp">Expiration</label>
                                     </div>
