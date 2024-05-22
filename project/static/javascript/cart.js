@@ -2,35 +2,26 @@ function addToCart(id, name, price, img, category) {
     alert(name+' has been added to the cart');
     let existingBook = false;
     const prefix = 'cart_cont';
+    let cart = [];
+
+    // Check if the cart already exists in localStorage
+    if (localStorage.getItem(prefix)) {
+        cart = JSON.parse(localStorage.getItem(prefix));
+    }
 
     // Check if the book is already in the cart
-    for(let i = 0; i < localStorage.length; ++i){
-        const key = localStorage.key(i);
-        if (key == prefix) {
-            try {
-                const cart = JSON.parse(localStorage.getItem(key));
-                existingBook = cart.find(book => book.id == id);
-                break;
-            } catch (error) {
-                console.error('Error parsing stored book:', error);
-            }
-        }
-    }
+    existingBook = cart.find(book => book.id == id);
+
     if (existingBook) {
         existingBook.quantity++;
     } else {
-        let cart = [];
         // If the book is not in the cart, add it with a quantity of 1
         let book = {id, name, price, img, category, quantity: 1};
         cart.push(book);
-        // Store the cart data in localStorage
-        localStorage.setItem('cart_cont', JSON.stringify(cart));
     }
-
-    // updateCart();
+    localStorage.setItem(prefix, JSON.stringify(cart));
 }
 
-let counter = 0;
 function updateCart() {
     let cartDisplay = document.getElementById('cart_cont');
 
@@ -45,6 +36,7 @@ function updateCart() {
     }
 
     let totalPrice = 0;
+    let counter = 0;
 
     // Add each book in the cart to the display
     //for (let i = 0; i < cart.length; i++){
@@ -149,7 +141,7 @@ function updateCart() {
         // <!--  onclick="this.parentNode.querySelector('input[type=number]').stepUp()" -->
         div.innerHTML = `
         <div class="col-md-2 col-lg-2 col-xl-2">
-            <img src="images/cleanCode.jpg" class="img-fluid rounded-3 cart_img" alt="${book.name}" style="width: 65px">
+            <img src="${book.img}" class="img-fluid rounded-3 cart_img" alt="${book.name}" style="width: 65px">
         </div>
         <div class="col-md-3 col-lg-3 col-xl-3">
             <h6 class="text-muted cart_category">${book.category}</h6>
@@ -193,5 +185,5 @@ function checkout() {
 
     updateCart();
     
-    // alert('Thank you for shopping! Your order has been placed.');
+    alert('Thank you for shopping! Your order has been placed.');
 }
