@@ -1,5 +1,5 @@
 from django import forms
-from .models import Book, Category, Checkout
+from .models import Book, Category, Checkout , Signup
 
 
 class CategoryForm(forms.ModelForm):
@@ -47,3 +47,23 @@ class EditBookForm(forms.ModelForm):
     class Meta:
         model = Book
         fields = ['description', 'name', 'author', 'price', 'category', 'status']
+
+class SignupForm(forms.ModelForm):
+    class Meta:
+        model = Signup
+        fields = ['username', 'email', 'password' ,'confirmPassword', 'isAdmin' , ]
+        labels = {
+            'username': '',
+            'email': '',
+            'password': '',
+            'confirmPassword': '',
+            'isAdmin': 'Sign up as Admin',
+        }
+        widgets = {
+            'username': forms.TextInput(attrs={'placeholder': ' username', 'class': 'form_field'}),
+            'email': forms.TextInput(attrs={'placeholder': ' email', 'class': 'form_field'}),
+            'password': forms.PasswordInput(attrs={'placeholder': ' password', 'class': 'form_field'}),
+            'confirmPassword': forms.PasswordInput(attrs={'placeholder': 'Confirm your password', 'class': 'form_field'}),
+            'isAdmin': forms.CheckboxInput(),
+
+        }

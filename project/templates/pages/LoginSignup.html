@@ -1,127 +1,66 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+{% extends 'base.html' %}
 
-    <!-- Google fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap"
-      rel="stylesheet"
-    />
+{% load static %}
 
-    <!-- Style sheet -->
-    <link rel="stylesheet" href="styles/LoginSignupStyle.css" />
-    <!-- <link rel="stylesheet" href="styles/all.min.css" /> -->
-    <title>Chapterfly</title>
-  </head>
-  <body>
-    <!-- Start Header -->
-    <div class="header" id="header">
-        <div class="container">
-          <a href="main.html" class="logo"><i class="fa-solid fa-book-open icon"></i> Chapterfly</a
-          >
-  
-          <ul class="main-nav">
-            <li><a href="#footer">Contact us</a></li>
-            <li><a href="accountUser.html">Account</a></li>
-            <li><a href="LoginSignup.html">Login / Signup</a></li>
-            <li><a href="cart.html">My cart</a></li>
-            <li><a href="views.html" class="discover">Discover</a></li>
-          </ul>
-        </div>
-      </div>
-      <!-- End Header -->
-    <!--start login signup section-->
+{% block style %}
+<link rel="stylesheet" href="{% static 'styles/LoginSignupStyle.css' %}"/>
+{% endblock %}
 
-    <div class="login_signup_section">
-        <div class="LScontainer" id="LScontainer">
-            <div class="signup">
-                <form>
-                    <h1 id="signuph1">Create Account</h1>
-                    <span>Enter your information to complete</span>
-                    <span>registeration</span>
-                    <div class="form_inputs">
-                        <input type="text" placeholder="User Name" id="usernameInput">
-                        <input type="email" placeholder="E-Mail" id="emailInput">
-                        <input type="password" placeholder="Password" id="passwordInput">
-                        <input type="password" placeholder="Confirm Password" id="confirmPasswordInput">
-                    </div><!--form inputs-->
-                    <div id="signupinform">Sign Up</div>
-                </form>
-                <div class="admin">
-                    <input type="checkbox" id="checkboxAdmin" class="checkbox_admin">
-                <label class="is_admin_label" for="checkboxAdmin">Sign Up as Admin</label>
-                </div>
-            </div><!-- end signup-->
-    
-            <div class="login">
-                <form>
-                    <h1>LogIn</h1>
-                    <span class="login_desc">Enter UserName and Password</span>
-                    <div class="form_inputs">
-                        <input type="text" placeholder="User Name">
-                        <input type="password" placeholder="Password">
-                    </div><!--form input-->
-                    <button id="login_btn">Log In</button>
-                </form>
-            </div><!-- end login-->
-    
-            <div class="circle-container">
-                <div class="circle">
-                    <div class="circle_left">
-                        <h1>Already have account!</h1>
-                        <span>Enter your personal details to use</span>
-                        <span> all of site features</span>
-                        <button id="Login">Log In</button>
-                    </div><!--circle left-->
-                    <div class="circle_right">
-                        <h1>Welcome to Chapterfly!</h1>
-                        <span>Register with your personal details to make</span><span>an account in Chapterfly</span>
-                        <button id="register">Sign Up</button>
-                    </div><!--circle right-->
-                </div><!--circle-->
-            </div><!--circle-container-->
-    
-        </div><!--container-->
-    </div><!--end login signup section-->
-    <script src="javascript/LoginSignupJS.js"></script>
-    <script src="javascript/adminORuser.js">
-    </script>
-        <!-- Start Footer -->
-        <footer id="footer">
-            <div class="container">
-              <div class="boxes">
-                <div class="box">
-                  <h3> <i class="fa-solid fa-book-open icon"></i> Chapterfly</h3>
-                  <p>Chapterfly was born out of a shared love for books and a desire to make them more accessible.</p>
-                  <div class="social">
-                    <a href="https://facebook.com"><img src="https://placehold.co/30x30" alt=""></a>
-                    <a href="https://instagram.com"><img src="https://placehold.co/30x30" alt=""></a>
-                    <a href="https://twitter.com"><img src="https://placehold.co/30x30" alt=""></a>
-                  </div>
-                </div>
-                <div class="box">
-                  <h4>EXPLORE</h4>
-                  <ul>
-                    <li><a href="views.html">Programming</a></li>
-                    <li><a href="views.html">Fantasy</a></li>
-                    <li><a href="views.html">Comedy</a></li>
-                  </ul>
-                </div>
-                <div class="box">
-                  <h4>ABOUT</h4>
-                  <p>We believe that stories have the power to transport us, teach us, and connect us.</p>
-                </div>
-              </div>
-              <div class="bottom-line">
-                <p>© 2024 Chapterfly</p>
-                <p>All rights reserved.</p>
-              </div>
-            </div>
-          </footer>
-          <!-- End Footer -->
-  </body>
-  </html>
+{% block title %}
+Login / Signup
+{% endblock %}
+
+{% block content %}
+<div class="login_signup_section">
+  <div class="LScontainer" id="LScontainer">
+      <div class="signup">
+          <form method="POST">
+            {% csrf_token %}
+              <h1 id="signuph1">Create Account</h1>
+              <span>Enter your information to complete</span>
+              <span>registeration</span>
+              <div class="form_inputs">
+                
+                  {{ SignupForm }}
+
+              </div><!--form inputs-->
+              <button type="submit" id="signupinform">Sign Up</button type="submit">
+          </form>
+        
+      </div><!-- end signup-->
+
+      <div class="login">
+          <form>
+              <h1>LogIn</h1>
+              <span class="login_desc">Enter UserName and Password</span>
+              <div class="form_inputs">
+                  <input type="text" placeholder="User Name">
+                  <input type="password" placeholder="Password">
+              </div><!--form input-->
+              <button id="login_btn">Log In</button>
+          </form>
+      </div><!-- end login-->
+
+      <div class="circle-container">
+          <div class="circle">
+              <div class="circle_left">
+                  <h1>Already have account!</h1>
+                  <span>Enter your personal details to use</span>
+                  <span> all of site features</span>
+                  <button id="Login">Log In</button>
+              </div><!--circle left-->
+              <div class="circle_right">
+                  <h1>Welcome to Chapterfly!</h1>
+                  <span>Register with your personal details to make</span><span>an account in Chapterfly</span>
+                  <button id="register">Sign Up</button>
+              </div><!--circle right-->
+          </div><!--circle-->
+      </div><!--circle-container-->
+
+  </div><!--container-->
+</div><!--end login signup section-->
+<script src="{% static 'javascript/LoginSignupJS.js' %}"></script>
+<script src="{% static 'javascript/adminORuser.js' %}"></script>
+</script>
+{% endblock content %}
+

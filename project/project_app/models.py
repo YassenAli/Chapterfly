@@ -51,3 +51,15 @@ class Checkout(models.Model):
         verbose_name = 'Checkout'
         verbose_name_plural = 'Checkouts'
         ordering = ['cardholder_name']
+
+class Signup(models.Model):
+    username = models.CharField(max_length=20)
+    email = models.CharField(max_length=40)
+    password = models.CharField(max_length=20)
+    confirmPassword = models.CharField(max_length=20)
+    isAdmin = models.BooleanField(default=False)
+    profilePicture = models.ImageField(default='default.jpg', upload_to='profilePictures')
+
+
+    def __str__(self):
+        return self.username

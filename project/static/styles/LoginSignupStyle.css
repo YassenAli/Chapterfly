@@ -195,7 +195,7 @@
     overflow: hidden;
 }
 .form_inputs>input{
-    height: 20px;
+    /* height: 20px; */
     background-color: #eee;
     border: #eee;
     margin: 8px 0;
@@ -205,6 +205,10 @@
     outline: none;
     font-weight: bold;
     width: 90%;
+}
+.form_field{
+  margin-top: 15px;
+  width: 100%;
 }
 .signup{
     width: 50%;

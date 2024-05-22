@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
-from .forms import BookForm, CategoryForm, CheckoutForm, EditBookForm
+from .forms import BookForm, CategoryForm, CheckoutForm, EditBookForm , SignupForm
 
 # Create your views here.
 
@@ -85,3 +85,15 @@ def delete_book(request, book_id):
         book.delete()
         return redirect('view')
     return render(request, 'pages/delete_book.html', {'book': book})
+
+def LoginSignup(request):
+    if request.method == 'POST':
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            form.save()
+    else:
+        form = SignupForm()
+    return render(request , 'pages/LoginSignup.html' , {'SignupForm' : form})
+
+
+ 
