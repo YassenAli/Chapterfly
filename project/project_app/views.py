@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from .forms import BookForm, CategoryForm, CheckoutForm, EditBookForm , SignupForm
+from django.http import JsonResponse, HttpResponseBadRequest
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -50,14 +53,6 @@ def cart(request):
 def main(request):
     return render(request, 'pages/main.html')
 
-def details(request, id):
-    bookID = Book.objects.get(id=id)
-    context = {
-        'book': bookID
-    }
-    return render(request, 'pages/details.html', context)
-
-
 def account(request):
     #get username
     #get profile picture
@@ -86,6 +81,74 @@ def delete_book(request, book_id):
         return redirect('view')
     return render(request, 'pages/delete_book.html', {'book': book})
 
+# def details(request, id):
+#     bookID = Book.objects.get(id=id)
+#     context = {
+#         'book': bookID
+#     }
+#     if request.method == 'POST' and 'add-to-wishlist' in request.POST:
+#         profile = Profile.objects.get(user=request.user)
+#         profile.wishlist.add(bookID)
+#         return JsonResponse({'status': 'success'})
+#     return render(request, 'pages/details.html', context)
+
+# def add_love(request):
+#     if request.method == 'POST':
+#         book_id = request.POST.get('book-id')
+#         book = Book.objects.get(id=book_id)
+#         profile = Profile.objects.get(user=request.user)
+#         # profile = request.user.profile
+#         if book in profile.wishlist.all():
+#             return JsonResponse({'status': 'already_in_wishlist'})
+#         else:
+#             profile.wishlist.add(book)
+#             return JsonResponse({'status': 'success'})
+#     return HttpResponseBadRequest() 
+
+@login_required
+def details(request, id):
+    try:
+        bookID = Book.objects.get(id=id)
+    except Book.DoesNotExist:
+        return HttpResponseBadRequest('Book does not exist')
+
+    if request.method == 'POST' and 'add-to-wishlist' in request.POST:
+        profile = Profile.objects.get(user=request.user)
+        profile.wishlist.add(bookID)
+        return JsonResponse({'status': 'success'})
+
+    context = {
+        'book': bookID
+    }
+    return render(request, 'pages/details.html', context)
+
+@csrf_exempt
+def add_love(request):
+    if request.method == 'POST':
+        if not request.user.is_authenticated:
+            return redirect('LoginSignup')
+
+        book_id = request.POST.get('book-id')
+        try:
+            book = Book.objects.get(id=book_id)
+            profile = Profile.objects.get(user=request.user)
+        except (Book.DoesNotExist, Profile.DoesNotExist):
+            return HttpResponseBadRequest('Book or user does not exist')
+
+        if book in profile.wishlist.all():
+            return JsonResponse({'status': 'already_in_wishlist'})
+        else:
+            profile.wishlist.add(book)
+            return JsonResponse({'status': 'success'})
+
+    return HttpResponseBadRequest()
+
+def wishlist(request):
+    context = {
+        'books': Profile.objects.get(user=request.user).wishlist.all(),
+    }
+    return render(request, 'pages/add_love.html', context)
+    
 def LoginSignup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
@@ -94,6 +157,3 @@ def LoginSignup(request):
     else:
         form = SignupForm()
     return render(request , 'pages/LoginSignup.html' , {'SignupForm' : form})
-
-
- 
