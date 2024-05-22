@@ -2,8 +2,15 @@
 
 {% load static %}
 
+{% block style %}
+<link rel="stylesheet" href="{% static 'styles/details.css' %}" />
+{% endblock style %}
+
+{% block title %}
+Chapterfly - {{book.name}}
+{% endblock title %}
+
 {% block content %}
-    <link rel="stylesheet" href="{% static 'styles/details.css' %}" />
     <div class="book">
       <div class="logo"><i class="fa-solid fa-book-open icon"></i> Chapterfly</a></div>
       <h2><span id="name">{{book.name}}</span></h2>
