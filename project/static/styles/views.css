@@ -1,292 +1,4 @@
-/* 
-  Nav bar (done)
-  Header (done)
-  Featured books (done)
-  call to action (done)
-  benefits (done)
-  Testimonials (done)
-  call to action (done)
-  footer (done)
-*/
-
-/* Start global rules */
-:root {
-    --main-transition-duration: 0.3s;
-  
-    --primary: #333a73;
-    --secondary: #378ce7;
-    --accent1: #67c6e3;
-    --accent2: #f9f2e7;
-    --accent3: #f08080;
-    --bgcolor: #effafc;
-  
-    --main-box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
-  }
-  * {
-    box-sizing: border-box;
-  }
-  html {
-    scroll-behavior: smooth;
-  }
-  body {
-    font-family: "Cairo", sans-serif;
-    margin: 0;
-    padding: 0;
-  }
-  a {
-    text-decoration: none;
-  }
-  ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  .container {
-    padding: 0 15px;
-    margin: 0 auto;
-  }
-  /* small screens */
-  @media (min-width: 768px) {
-    .container {
-      width: 750px;
-    }
-  }
-  /* medium screens */
-  @media (min-width: 992px) {
-    .container {
-      width: 970px;
-    }
-  }
-  /* large screens */
-  @media (min-width: 1200px) {
-    .container {
-      width: 1170px;
-    }
-  }
-  #searchInput {
-    width: 200px;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-}
-.searchBtn {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-.searchBtn:hover {
-    background-color: #0056b3;
-}
-
-search{
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: center;
-}
-
-  .main-title {
-    margin: 0 auto 20px;
-    padding: 10px 20px;
-    font-size: 30px;
-    width: fit-content;
-    position: relative;
-    z-index: 1;
-    transition: 0.4 0.3 ease-in;
-    border: 3px solid var(--primary);
-  }
-  .main-title:hover {
-    background-color: var(--accent1);
-    border-color: var(--accent1);
-    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-  }
-  .main-title::before {
-    content: "";
-    width: 15px;
-    height: 15px;
-    background-color: var(--accent1);
-    position: absolute;
-    border-radius: 50%;
-    left: -25px;
-    top: 50%;
-    transform: translateY(-50%);
-    transition: var(--main-transition-duration);
-  }
-  .main-title::after {
-    content: "";
-    width: 15px;
-    height: 15px;
-    background-color: var(--accent1);
-    position: absolute;
-    border-radius: 50%;
-    right: -25px;
-    top: 50%;
-    transform: translateY(-50%);
-    transition: var(--main-transition-duration);
-  }
-  .main-title:hover::before {
-    left: 1px;
-  }
-  .main-title:hover::after {
-    right: 1px;
-  }
-  /* end global rules */
-  /* ****************************************************** */
-  /* Start header */
-  .header {
-    background-color: white;
-    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
-    position: relative;
-  }
-  .header .container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    position: relative;
-  }
-  .header .icon {
-    position: relative;
-    margin-right: 30px;
-    margin-top: 2px;
-  }
-  .header .logo {
-    color: var(--primary);
-    font-weight: bold;
-    font-size: 29px;
-    height: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    transition: var(--main-transition-duration);
-  }
-  .header .logo:hover {
-    color: var(--secondary);
-  }
-  .header .main-nav {
-    display: flex;
-    justify-content: center;
-  }
-  /* .header .main-nav .search-box {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-    }
-    .header .main-nav .search-box i {
-      cursor: pointer;
-      padding: 10px;
-    }
-    .header .main-nav .search-box input {
-      background-color: var(--bgcolor);
-      border: 2px solid var(--primary);
-      border-radius: 15px;
-      padding: 2px 10px;
-      box-shadow: none;
-      font-size: 16px;
-    } */
-  .main-nav > li > a {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100px;
-    position: relative;
-    padding: 0 20px;
-    color: var(--primary);
-    transition: var(--main-transition-duration);
-    font-weight: bold;
-    overflow: hidden;
-  }
-  .main-nav > li:hover .mega-menu {
-    opacity: 1;
-    z-index: 100;
-    top: 100%;
-  }
-  .main-nav > li > a::before {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 4px;
-    background-color: var(--secondary);
-    top: 0;
-    left: -100%;
-    transition: var(--main-transition-duration);
-  }
-  .main-nav > li > a:hover {
-    color: var(--secondary);
-    background-color: #fafafa;
-  }
-  .main-nav > li > a:hover::before {
-    left: 0;
-  }
-  .header .mega-menu {
-    position: absolute;
-    width: 90%;
-    left: 155px;
-    padding: 16px;
-    background-color: white;
-    border-bottom: 3px solid var(--primary);
-    z-index: -1;
-    display: flex;
-    gap: 40px;
-    top: calc(100% + 50px);
-    transition: top var(--main-transition-duration),
-      opacity var(--main-transition-duration);
-    opacity: 0;
-  }
-  .header .mega-menu .image {
-    max-width: 50%;
-  }
-  .mega-menu .image img {
-    width: 100%;
-  }
-  .mega-menu .links {
-    min-width: 240px;
-  }
-  .mega-menu .links li {
-    position: relative;
-  }
-  .mega-menu .links li::before {
-    content: "";
-    top: 0;
-    position: absolute;
-    width: 0;
-    background-color: var(--bgcolor);
-    height: 100%;
-    z-index: -1;
-    transition: var(--main-transition-duration);
-  }
-  .mega-menu .links li:hover::before {
-    width: 130px;
-  }
-  .mega-menu .links li::after {
-    content: "";
-    position: absolute;
-    width: 0;
-    height: 100%;
-    top: 0;
-    background-color: var(--primary);
-    transition: 0.2;
-  }
-  .mega-menu .links li:hover::after {
-    width: 5px;
-  }
-  .mega-menu .links li:not(:last-child) {
-    border-bottom: 1px solid var(--primary);
-  }
-  .mega-menu .links li a {
-    font-size: 16px;
-    padding: 15px;
-    color: var(--primary);
-    font-weight: bold;
-    display: block;
-  }
-  /* End header */
-  /* Start User */
+/********************************************* User *******************************************/
   .books {
     display: flex;
     justify-content: space-evenly;
@@ -299,82 +11,8 @@ search{
     flex-direction: column;
     justify-content: space-between;
   }
-  /* End User */
-  /* Admin */
-  #bookTable {
-    border-collapse: collapse;
-    /* width: 100%; */
-    max-width: 90%;
-    margin: 0 auto;
-  }
-  
-  #bookTable th,
-  #bookTable td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-  }
-  
-  #bookTable tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-  
-  #bookTable tr:hover {
-    background-color: #ddd;
-  }
-  
-  #bookTable th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-    background-color: #58a3da;
-    color: white;
-  }
-  
-  .Buttons {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  
-  .delete {
-    width: 50px;
-  }
-  
-  .delete {
-    float: right;
-    margin-right: 10px;
-    margin-top: 10px;
-    background-color: #ff0000;
-    color: white;
-    padding: 5px 5px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .delete:hover {
-    background-color: #c60000;
-    color: white;
-  }
-  
-  #edit {
-    position: absolute;
-    right: 50%;
-    margin-top: 20px;
-    /* transform: translateX(-50%); */
-    background-color: #4caf50;
-    color: #fff;
-    padding: 5px 5px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer; /* Change cursor to pointer on hover */
-  }
-  
-  #edit:hover {
-    background-color: #46d74b;
-  }
- .add-to-cart {
+
+  .add-to-cart {
     /* position: absolute; */
     display: flex;
     align-items: center;
@@ -424,6 +62,76 @@ search{
     border: 2px solid #58a3da;
     color: #000;
 }
-#admin, #user{
-  display: none;
-}
+  /* End User */
+
+  /********************************************* Admin *****************************************/
+  #bookTable {
+    border-collapse: collapse;
+    /* width: 100%; */
+    max-width: 90%;
+    margin: 0 auto;
+  }
+  
+  #bookTable th,
+  #bookTable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  #bookTable tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  #bookTable tr:hover {
+    background-color: #ddd;
+  }
+  
+  #bookTable th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #58a3da;
+    color: white;
+  }
+  
+  .EditDelete {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .delete, .edit {
+    width: 100%;
+    border: none; 
+    color: white; 
+    padding: 5px 5px;
+    text-align: center; 
+    text-decoration: none;
+    font-size: 14px; 
+    cursor: pointer;
+    border-radius: 4px;
+  }
+
+  .delete {
+    background-color: #ef161a;
+    margin-top: 10px;
+    margin-left: auto;
+  }
+
+  .delete:hover {
+    background-color: #ef161abb;
+  }
+
+  .edit{
+    background-color: #4caf50; 
+    margin-top: 20px;
+    margin-right: auto;
+  }
+  
+  .edit:hover {
+    background-color: #46d74b;
+  }
+
+  /* End Admin */
