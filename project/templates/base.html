@@ -1,6 +1,5 @@
 {% load static %}
 
-{% include 'parts/nav.html' %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -28,16 +27,18 @@
     
     <link rel="icon" href="">
     
+    <title>
+      {% block title %}
 
-    {% block title %}
-
-    {% endblock %}
+      {% endblock %}
+    </title>
   </head>
   <body>
+{% include 'parts/nav.html' %}
+
 {% block content %}
 
 {% endblock content%}
+{% include 'parts/footer.html' %}
 </body>
 </html>
-
-{% include 'parts/footer.html' %}
