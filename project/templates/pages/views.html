@@ -5,34 +5,37 @@
 {% block style %}
 <link rel="stylesheet" href="{% static 'styles/views.css' %}" />
 {% endblock style %}
+{% block title %}
+Chapterfly - View
+{% endblock title %}
 
 {% block content %}
-        <div id="user" class="hidden">
-            <!-- SEARCH FORM -->
-            <form method="GET" class="form-inline" action="{% url 'view' %}">
-                <div class="input-group">
-                <input type="search" class="form-control" name="search-name">
-                <div class="input-group-append">
-                <button class="btn" type="submit"><i class="fas fa-search"></i></button>
-                </div>
-                </div>
-            </form>
+        <!-- SEARCH FORM -->
+        <form method="GET" class="form-inline" action="{% url 'view' %}">
+            <div class="input-group">
+            <input type="search" class="form-control" name="search-name">
+            <div class="input-group-append">
+            <button class="btn" type="submit"><i class="fas fa-search"></i></button>
+            </div>
+            </div>
+        </form>
 
         <div class="row">
-            <ul class="nav">
-                {% for cat in category|slice:'4' %}
-                <li class="nav-item">
-                    <a href="#">{{cat.name}}</a>
-                </li>
-                {% endfor %}
-            </ul>
+        <ul class="nav">
+            {% for cat in category|slice:'6' %}
+            <li class="nav-item cat{{cat.id}}">
+                <a href="#" class="nav-link bg-primary">{{cat.name}}</a>
+            </li>
+            {% endfor %}
+        </ul>
         </div>
+        <div id="user" class="hidden">        
         <div id="books">
                 <!-- books items will be dynamically added here -->
                 <div class="featured" id="featured">
                   <div class="container" id="container1">
                     {% for book in books %}
-                        <div class="book box">
+                        <div class="book box bookhide book{{book.category.id}}">
                             {% if book.img %}
                                 <img src="{{book.img}}" alt="Book Image" class="book-img" sytle="width: 600px"/>
 
@@ -88,46 +91,15 @@
             <tbody>
                 {% comment %} books items will be dynamically added here  {% endcomment %}
                 {% for book in books %}
-                <tr>
+                <tr class="bookhide book{{book.category.id}}">
                     <td>{{book.id}}</td>
                     <td>{{book.name}}</td>
                     <td>{{book.author}}</td>
                     <td>{{book.category}}</td>
                     <td>{{book.description}}</td>
-                    <td class="Buttons">
-                        <a href="{% url 'edit_book' book.id %}" 
-                        style=
-                        "background-color: #4caf50; 
-                        margin-top: 20px;
-                        right: 50%;
-                        border: none; 
-                        color: white; 
-                        padding: 5px 15px;
-                        text-align: center; 
-                        text-decoration: none;
-                        display: inline-block; 
-                        font-size: 14px; 
-                        cursor: pointer;
-                        border-radius: 4px;"
-                          >
-                          Edit</a>
-
-                        <a href="{% url 'delete_book' book.id %}" class="delete" 
-                          style=
-                          "background-color: #ef161a; 
-                          margin-top: 20px;
-                          right: 50%;
-                          border: none; 
-                          color: white; 
-                          padding: 5px 5px;
-                          text-align: center; 
-                          text-decoration: none;
-                          display: inline-block; 
-                          font-size: 14px; 
-                          cursor: pointer;
-                          border-radius: 4px;"
-                            >
-                        Delete</a>
+                    <td class="EditDelete">
+                        <a href="{% url 'edit_book' book.id %}" class="edit">Edit</a>
+                        <a href="{% url 'delete_book' book.id %}" class="delete">Delete</a>
                     </td>
                 </tr>
                 {% endfor %}
@@ -150,7 +122,17 @@
             </div>
         </div>
     </div>
-
+    
+    {% comment %} Scripts {% endcomment %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        {% for book in books %}
+            $(".cat{{book.category.id}}").click(function(){
+                $(".bookhide").hide();
+                $(".book{{book.category.id}}").show();
+            });
+        {% endfor %}
+    </script>        
     <script src="{% static 'javascript/cart.js' %}"></script>
 {% endblock content %}
 {% block extra_scripts %}
