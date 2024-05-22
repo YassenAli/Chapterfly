@@ -69,7 +69,7 @@ Chapterfly - {{book.name}}
       };
       xhttp.open("POST", "/add_love/", true);
       xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      xhttp.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));  // Django requires this for POST requests
+      xhttp.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
       xhttp.send("book-id=" + bookId);
   }
     </script>
