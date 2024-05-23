@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
-from .forms import BookForm, CategoryForm, CheckoutForm, EditBookForm , SignupForm
+from .forms import BookForm, CategoryForm, CheckoutForm, EditBookForm , SignupForm , loginForm
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+
 
 # Create your views here.
 
@@ -149,15 +151,6 @@ def wishlist(request):
     }
     return render(request, 'pages/add_love.html', context)
     
-def LoginSignup(request):
-    if request.method == 'POST':
-        form = SignupForm(request.POST)
-        if form.is_valid():
-            form.save()
-    else:
-        form = SignupForm()
-    return render(request , 'pages/LoginSignup.html' , {'SignupForm' : form})
-
 
 def get_profile_picture(username):
     user = Signup.objects.get(username=username)
@@ -176,3 +169,38 @@ def borrow_book(book_id):
         return ('Book is not available for borrowing') #update to make it a json response
 
 
+
+
+def LoginSignup(request):
+    if request.method == 'POST':
+        if 'signup' in request.POST:
+            form = SignupForm(request.POST)
+            login_form = loginForm()
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Account created successfully. Please log in.')
+                return redirect('LoginSignup')
+        else:
+            form = SignupForm()
+            login_form = loginForm(request.POST)
+            if login_form.is_valid():
+                username = login_form.cleaned_data['usernameLogin']
+                password = login_form.cleaned_data['passwordLogin']
+                
+                try:
+                    signup_user = Signup.objects.get(username=username)
+                    if signup_user.password == password: 
+
+                        request.session['user_id'] = signup_user.id  
+                        return redirect('view')
+                    else:
+                        message = 'Invalid username or password'
+                except Signup.DoesNotExist:
+                    message = 'Invalid username or password'
+            else:
+                message = 'Form is not valid'
+            return render(request, 'pages/LoginSignup.html', {'SignupForm': form, 'loginForm': login_form, 'message': message})
+    else:
+        form = SignupForm()
+        login_form = loginForm()
+    return render(request, 'pages/LoginSignup.html', {'SignupForm': form, 'loginForm': login_form})

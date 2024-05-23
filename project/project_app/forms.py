@@ -73,3 +73,15 @@ class SignupForm(forms.ModelForm):
         if password and confirmPassword and password != confirmPassword:
             raise forms.ValidationError("Passwords do not match")
         return confirmPassword    
+
+class loginForm(forms.Form):
+    usernameLogin = forms.CharField(
+        max_length=20,
+        widget=forms.TextInput(attrs={'placeholder': 'username', 'class': 'form_field'}),
+        label=''
+    )
+    passwordLogin = forms.CharField(
+        max_length=20,
+        widget=forms.PasswordInput(attrs={'placeholder': 'password', 'class': 'form_field'}),
+        label=''
+    )

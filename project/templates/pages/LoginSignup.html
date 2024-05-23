@@ -24,21 +24,30 @@ Login / Signup
                   {{ SignupForm }}
 
               </div><!--form inputs-->
-              <button type="submit" id="signupinform">Sign Up</button type="submit">
+              <button type="submit" id="signupinform" name="signup">Sign Up</button type="submit">
           </form>
-        
+            {% if message %}
+            <div class="error-message">{{ message }}</div>
+            {% endif %}
+      
       </div><!-- end signup-->
 
       <div class="login">
-          <form>
+          <form method="POST">
+            {% csrf_token %}
               <h1>LogIn</h1>
               <span class="login_desc">Enter UserName and Password</span>
               <div class="form_inputs">
-                  <input type="text" placeholder="User Name">
-                  <input type="password" placeholder="Password">
+                  <!-- <input type="text" placeholder="User Name">
+                  <input type="password" placeholder="Password"> -->
+                  {{ loginForm }}
               </div><!--form input-->
-              <button id="login_btn">Log In</button>
+              <button id="login_btn" type="submit" name="login">Log In</button>
           </form>
+          {% if message %}
+            <div class="error-message" style="text-align: center; color: red;">{{ message }}</div>
+            {% endif %}
+
       </div><!-- end login-->
 
       <div class="circle-container">
