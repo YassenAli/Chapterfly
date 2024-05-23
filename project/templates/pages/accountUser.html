@@ -30,7 +30,7 @@
     </div>
 </div>
 <div class="container" id="bookshelf">
-    <button id="log-out" onclick="logout()">Log Out</button>
+    <button id="log-out" onclick="window.location.href = '{% url 'logout' %}'">Log Out</button>
 </div>
 <script src="{% static 'javascript/account.js' %}"></script>
 {% endblock content %}
