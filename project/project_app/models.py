@@ -47,7 +47,7 @@ class Book(models.Model):
     
 class Signup(models.Model):
     username = models.CharField(max_length=20, unique=True)
-    email = models.CharField(max_length=40, unique=True)
+    email = models.EmailField(max_length=40, unique=True)
     password = models.CharField(max_length=20)
     confirmPassword = models.CharField(max_length=20)
     isAdmin = models.BooleanField(default=False)
