@@ -200,3 +200,7 @@ def LoginSignup(request):
 
 # def home(request):
 #     return render(request, "pages/main.html", {})
+
+def logout(request):
+    request.session['isLogged'] = False
+    return redirect('LoginSignup') 
