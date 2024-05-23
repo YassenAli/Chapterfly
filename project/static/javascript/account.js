@@ -28,12 +28,18 @@ function changePhoto() {
 }
 
 function getPhoto() {
-    const savedPhoto = localStorage.getItem('profilePicture');
+    const profileImg = document.getElementById('profileImg');
+    profileImg.src = data.profile_picture_url;
     if (savedPhoto) {
         const userProfileImg = document.getElementById("profileImg");
         userProfileImg.src = savedPhoto;
     }
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+    getPhoto();
+});
+
 
 
 function getBorrowedBooks() {
