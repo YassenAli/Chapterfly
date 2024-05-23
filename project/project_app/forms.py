@@ -61,7 +61,7 @@ class SignupForm(forms.ModelForm):
         }
         widgets = {
             'username': forms.TextInput(attrs={'placeholder': ' username', 'class': 'form_field'}),
-            'email': forms.TextInput(attrs={'placeholder': ' email', 'class': 'form_field'}),
+            'email': forms.EmailInput(attrs={'placeholder': ' email', 'class': 'form_field'}),
             'password': forms.PasswordInput(attrs={'placeholder': ' password', 'class': 'form_field'}),
             'confirmPassword': forms.PasswordInput(attrs={'placeholder': 'Confirm your password', 'class': 'form_field'}),
             'isAdmin': forms.CheckboxInput(),
