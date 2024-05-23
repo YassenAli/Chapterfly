@@ -2,8 +2,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
 from .forms import BookForm, CategoryForm, CheckoutForm, EditBookForm , SignupForm , loginForm
 from django.http import JsonResponse, HttpResponseBadRequest
-from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 
@@ -91,48 +89,27 @@ def delete_book(request, book_id):
         return redirect('view')
     return render(request, 'pages/delete_book.html', {'book': book})
 
-# def details(request, id):
-#     bookID = Book.objects.get(id=id)
-#     context = {
-#         'book': bookID
-#     }
-#     if request.method == 'POST' and 'add-to-wishlist' in request.POST:
-#         profile = Profile.objects.get(user=request.user)
-#         profile.wishlist.add(bookID)
-#         return JsonResponse({'status': 'success'})
-#     return render(request, 'pages/details.html', context)
-
-# def add_love(request):
-#     if request.method == 'POST':
-#         book_id = request.POST.get('book-id')
-#         book = Book.objects.get(id=book_id)
-#         profile = Profile.objects.get(user=request.user)
-#         # profile = request.user.profile
-#         if book in profile.wishlist.all():
-#             return JsonResponse({'status': 'already_in_wishlist'})
-#         else:
-#             profile.wishlist.add(book)
-#             return JsonResponse({'status': 'success'})
-#     return HttpResponseBadRequest() 
-
-@login_required
 def details(request, id):
     try:
         book = Book.objects.get(id=id)
     except Book.DoesNotExist:
         return HttpResponseBadRequest('Book does not exist')
 
+    signup_user_id = request.session.get('user_id')
+    if not signup_user_id:
+        return HttpResponseBadRequest('User not authenticated')
+
     try:
-        profile = Profile.objects.get(user=request.user)
-    except Profile.DoesNotExist:
-        return HttpResponseBadRequest('Profile does not exist')
+        signup_user = Signup.objects.get(id=signup_user_id)
+    except Signup.DoesNotExist:
+        return HttpResponseBadRequest('User does not exist')
 
     if request.method == 'POST' and 'add-to-wishlist' in request.POST:
-        profile.wishlist.add(book)
+        signup_user.wishlist.add(book)
         return JsonResponse({'status': 'success'})
 
-    is_loved = profile.wishlist.filter(id=book.id).exists()
-    
+    is_loved = signup_user.wishlist.filter(id=book.id).exists()
+
     context = {
         'book': book,
         'is_loved': is_loved
@@ -140,7 +117,6 @@ def details(request, id):
     return render(request, 'pages/details.html', context)
 
 
-@csrf_exempt
 def add_love(request):
     if request.method == 'POST':
         if not request.user.is_authenticated:
@@ -150,14 +126,14 @@ def add_love(request):
         book_id = request.POST.get('book-id')
         try:
             book = Book.objects.get(id=book_id)
-            profile = Profile.objects.get(user=request.user)
-        except (Book.DoesNotExist, Profile.DoesNotExist):
+            signup_user = Signup.objects.get(id=request.session.get('user_id'))
+        except (Book.DoesNotExist, Signup.DoesNotExist):
             return HttpResponseBadRequest('Book or user does not exist')
 
-        if book in profile.wishlist.all():
+        if book in signup_user.wishlist.all():
             return JsonResponse({'status': 'already_in_wishlist'})
         else:
-            profile.wishlist.add(book)
+            signup_user.wishlist.add(book)
             return JsonResponse({'status': 'success'})
 
     return HttpResponseBadRequest()
@@ -184,9 +160,6 @@ def borrow_book(book_id):
         return ('Book successfully borrowed') #update to make it a json response
     else:
         return ('Book is not available for borrowing') #update to make it a json response
-
-
-
 
 def LoginSignup(request):
     if request.method == 'POST':

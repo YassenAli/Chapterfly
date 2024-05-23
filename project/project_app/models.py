@@ -52,11 +52,7 @@ class Signup(models.Model):
     confirmPassword = models.CharField(max_length=20)
     isAdmin = models.BooleanField(default=False)
     profilePicture = models.ImageField(default='default.jpg', upload_to='profilePictures')
+    wishlist = models.ManyToManyField(Book)
 
     def __str__(self):
         return self.username
-
-class Profile(models.Model):
-    # user = models.OneToOneField(Signup, on_delete=models.CASCADE)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    wishlist = models.ManyToManyField(Book)

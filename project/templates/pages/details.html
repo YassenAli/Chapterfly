@@ -9,7 +9,7 @@
       font-size: 24px;
       color: #ccc;
   }
-  .fa-heart .loved {
+  .loved {
       color: red;
   }
 </style>
@@ -38,7 +38,14 @@ Chapterfly - {{book.name}}
       {% csrf_token %}
       <input type="hidden" name="book-id" value="{{ book.id }}">
       <input type="hidden" name="add-to-wishlist" value="true">    
-      <button id="love-button">{{ 'Loved' if is_loved else 'Love' }} <i class="fa-solid fa-heart {{'loved' if is_loved else ''}}"></i></button>
+      <button id="love-button">
+        {% if is_loved %}
+          Loved
+        {% else %}
+          Love
+        {% endif %}
+        <i class="fa-solid fa-heart {% if is_loved %}'loved'{% endif %}"></i>
+      </button>
     </form>
 
     <a href="{% url 'view' %}" class="back">Back to Books</a>
