@@ -67,3 +67,9 @@ class SignupForm(forms.ModelForm):
             'isAdmin': forms.CheckboxInput(),
 
         }
+    def clean_confirmPassword(self):
+        password = self.cleaned_data.get('password')
+        confirmPassword = self.cleaned_data.get('confirmPassword')
+        if password and confirmPassword and password != confirmPassword:
+            raise forms.ValidationError("Passwords do not match")
+        return confirmPassword    
