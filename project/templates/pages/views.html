@@ -139,7 +139,7 @@ Chapterfly - View
         {% endfor %}
         function showResults(str) {
                 if (str.length === 0) {
-                    document.getElementById("search-results").innerHTML = "";
+                    // document.getElementById("books").innerHTML = books.innerHTML;
                     return;
                 }
 
@@ -151,17 +151,11 @@ Chapterfly - View
                         tempDiv.innerHTML = this.responseText;
 
                         // Interact with the new content using tempDiv
-                        const header = tempDiv.querySelector("#header");
-                        if (header) {
-                            header.innerHTML = "";
-                        }
-                        const searchBar = tempDiv.querySelector("#searchBar");
-                        if (searchBar) {
-                            searchBar.innerHTML = "";
-                        }
+                        const books = tempDiv.querySelector("#books");
 
                         // Once done with manipulations, insert the content into the actual DOM
-                        document.getElementById("search-results").innerHTML = tempDiv.innerHTML;
+                        document.getElementById("books").innerHTML = books.innerHTML;
+                        
                     }
                 };
         xhttp.open("GET", "/view/?search-name=" + str, true);

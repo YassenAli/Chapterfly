@@ -25,7 +25,7 @@
       <h2 class="main-title">Feautred Books</h2>
       <div class="container">
         <div class="box">
-          <img src="images/featured section books/5-club.jpeg" alt=""/>
+          <img src="../../static/images/featured section books/5-club.jpeg" alt=""/>
           <div class="content">
             <h3>The 5AM Club</h3>
             <p>
@@ -33,13 +33,13 @@
             </p>
           </div>
           <div class="info">
-            <a href="views.html" class="read-more"
+            <a href="{% url 'view' %}" class="read-more"
               >Read More <i class="fas fa-long-arrow-alt-right"></i
             ></a>
           </div>
         </div>
         <div class="box">
-          <img src="images/featured section books/atomic-habits.jpg" alt="" width="200px" />
+          <img src="../../static/images/featured section books/atomic-habits.jpg" alt="" width="200px" />
           <div class="content">
             <h3>Atomic Habits</h3>
             <p>
@@ -47,13 +47,13 @@
             </p>
           </div>
           <div class="info">
-            <a href="views.html" class="read-more"
+            <a href="{% url 'view' %}" class="read-more"
               >Read More <i class="fas fa-long-arrow-alt-right"></i
             ></a>
           </div>
         </div>
         <div class="box">
-          <img src="images/featured section books/rich-dad.jpg" alt="" width="200px" />
+          <img src="../../static/images/featured section books/rich-dad.jpg" alt="" width="200px" />
           <div class="content">
             <h3>Rich Dad Poor Dad</h3>
             <p>
@@ -61,7 +61,7 @@
             </p>
           </div>
           <div class="info">
-            <a href="views.html" class="read-more"
+            <a href="{% url 'view' %}" class="read-more"
               >Read More <i class="fas fa-long-arrow-alt-right"></i
             ></a>
           </div>
@@ -79,7 +79,7 @@
           Join our community and start borrowing and lending books with ease!
         </p>
         <div class="cta-buttons">
-          <a href="LoginSignup.html" class="primary-button">Sign Up for Free</a>
+          <a href="{% url 'LoginSignup' %}" class="primary-button">Sign Up for Free</a>
           <a href="#footer" class="secondary-button">Learn More</a>
         </div>
       </div>
@@ -92,7 +92,7 @@
       <div class="container">
         <div class="box money">
           <div class="img-holder">
-            <img src="images/features-1.jpg" alt="" width="400px" />
+            <img src="../../static/images/features-1.jpg" alt="" width="400px" />
           </div>
           <h2>Save Money</h2>
           <p>
@@ -101,7 +101,7 @@
         </div>
         <div class="box rare">
           <div class="img-holder">
-            <img src="images/features-2.jpg" alt="" width="400px" />
+            <img src="../../static/images/features-2.jpg" alt="" width="400px" />
           </div>
           <h2>Find Rare Books</h2>
           <p>
@@ -110,7 +110,7 @@
         </div>
         <div class="box community">
           <div class="img-holder">
-            <img src="images/features-3.jpg" alt="" width="400px" />
+            <img src="../../static/images/features-3.jpg" alt="" width="400px" />
           </div>
           <h2>Spend Time With Community</h2>
           <p>
@@ -223,7 +223,7 @@
     <div class="second-cta">
       <div class="container">
         <div class="cta-buttons">
-          <a href="LoginSignup.html" class="primary-button">Sign Up for Free</a>
+          <a href="{% url 'LoginSignup' %}" class="primary-button">Sign Up for Free</a>
         </div>
       </div>
     </div>

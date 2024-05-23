@@ -197,3 +197,6 @@ def LoginSignup(request):
         form = SignupForm()
         login_form = loginForm()
     return render(request, 'pages/LoginSignup.html', {'SignupForm': form, 'loginForm': login_form})
+
+# def home(request):
+#     return render(request, "pages/main.html", {})
