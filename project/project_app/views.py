@@ -157,3 +157,22 @@ def LoginSignup(request):
     else:
         form = SignupForm()
     return render(request , 'pages/LoginSignup.html' , {'SignupForm' : form})
+
+
+def get_profile_picture(username):
+    user = Signup.objects.get(username=username)
+    profile_picture_url = user.profilePicture.url
+    return profile_picture_url
+
+
+def borrow_book(book_id):
+    book = get_object_or_404(Book, pk=book_id)
+
+    if book.status == 'available':
+        book.status = 'borrowed'
+        book.save()
+        return ('Book successfully borrowed') #update to make it a json response
+    else:
+        return ('Book is not available for borrowing') #update to make it a json response
+
+
