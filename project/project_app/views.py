@@ -16,10 +16,18 @@ def view(request):
         title = request.GET['search-name']
         if title:
             search = search.filter(name__icontains=title)
-        
+
+    isLogged = request.session.get('isLogged')
+    is_admin = request.session.get('is_admin')
+
+    if isLogged is False :
+        return redirect('LoginSignup')
+
     context = {
         'category': Category.objects.all(),
         'books': search,
+        'is_admin' : is_admin,
+        'isLogged' : isLogged,
     }
     return render(request, 'pages/views.html', context)
 
@@ -190,6 +198,7 @@ def LoginSignup(request):
                 messages.success(request, 'Account created successfully. Please log in.')
                 return redirect('LoginSignup')
         else:
+            request.session['isLogged'] = False
             form = SignupForm()
             login_form = loginForm(request.POST)
             if login_form.is_valid():
@@ -200,7 +209,9 @@ def LoginSignup(request):
                     signup_user = Signup.objects.get(username=username)
                     if signup_user.password == password: 
 
-                        request.session['user_id'] = signup_user.id  
+                        request.session['user_id'] = signup_user.id 
+                        request.session['is_admin'] = signup_user.isAdmin
+                        request.session['isLogged'] = True
                         return redirect('view')
                     else:
                         message = 'Invalid username or password'
@@ -208,7 +219,7 @@ def LoginSignup(request):
                     message = 'Invalid username or password'
             else:
                 message = 'Form is not valid'
-            return render(request, 'pages/LoginSignup.html', {'SignupForm': form, 'loginForm': login_form, 'message': message})
+            return render(request, 'pages/LoginSignup.html', {'SignupForm': form, 'loginForm': login_form, 'message': message })
     else:
         form = SignupForm()
         login_form = loginForm()

@@ -33,6 +33,7 @@ Chapterfly - View
             {% endfor %}
         </ul>
         </div>
+        {%if not is_admin%}
         <div id="user" class="hidden">        
         <div id="books">
                 <!-- books items will be dynamically added here -->
@@ -78,7 +79,7 @@ Chapterfly - View
         </div>
     </div>
     </div>
-
+{% else %}
     <div id="admin" class="hidden">
         <h2 class="main-title">Available Books</h2>
         <table id="bookTable">
@@ -126,7 +127,7 @@ Chapterfly - View
             </div>
         </div>
     </div>
-    
+    {%endif%}
     {% comment %} Scripts {% endcomment %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>

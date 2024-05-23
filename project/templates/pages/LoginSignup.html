@@ -47,7 +47,9 @@ Login / Signup
           {% if message %}
             <div class="error-message" style="text-align: center; color: red;">{{ message }}</div>
             {% endif %}
-
+            {% if ID %}
+                <div class="error-message" style="text-align: center; color: red;">{{ ID }}</div>
+            {% endif  %}
       </div><!-- end login-->
 
       <div class="circle-container">
@@ -68,8 +70,8 @@ Login / Signup
 
   </div><!--container-->
 </div><!--end login signup section-->
-<script src="{% static 'javascript/LoginSignupJS.js' %}"></script>
+<script src="{% static 'javascript/LoginSignupJS.js' %}"></script>  {% comment %} this is for toggle {% endcomment %}
 <script src="{% static 'javascript/adminORuser.js' %}"></script>
-</script>
+
 {% endblock content %}
 
