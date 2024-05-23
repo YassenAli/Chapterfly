@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 # Create your models here.
 
 class Category(models.Model):
@@ -57,5 +57,6 @@ class Signup(models.Model):
         return self.username
 
 class Profile(models.Model):
-    user = models.OneToOneField(Signup, on_delete=models.CASCADE)
+    # user = models.OneToOneField(Signup, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     wishlist = models.ManyToManyField(Book)
