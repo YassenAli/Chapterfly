@@ -108,25 +108,34 @@ def delete_book(request, book_id):
 @login_required
 def details(request, id):
     try:
-        bookID = Book.objects.get(id=id)
+        book = Book.objects.get(id=id)
     except Book.DoesNotExist:
         return HttpResponseBadRequest('Book does not exist')
 
-    if request.method == 'POST' and 'add-to-wishlist' in request.POST:
+    try:
         profile = Profile.objects.get(user=request.user)
-        profile.wishlist.add(bookID)
+    except Profile.DoesNotExist:
+        return HttpResponseBadRequest('Profile does not exist')
+
+    if request.method == 'POST' and 'add-to-wishlist' in request.POST:
+        profile.wishlist.add(book)
         return JsonResponse({'status': 'success'})
 
+    is_loved = profile.wishlist.filter(id=book.id).exists()
+    
     context = {
-        'book': bookID
+        'book': book,
+        'is_loved': is_loved
     }
     return render(request, 'pages/details.html', context)
+
 
 @csrf_exempt
 def add_love(request):
     if request.method == 'POST':
         if not request.user.is_authenticated:
             return redirect('LoginSignup')
+            # return JsonResponse({'status': 'login_required'})
 
         book_id = request.POST.get('book-id')
         try:
@@ -145,9 +154,9 @@ def add_love(request):
 
 def wishlist(request):
     context = {
-        'books': Profile.objects.get(user=request.user).wishlist.all(),
+        'wishlist_items': Profile.objects.get(user=request.user).wishlist.all(),
     }
-    return render(request, 'pages/add_love.html', context)
+    return render(request, 'pages/wishlist.html', context)
     
 def LoginSignup(request):
     if request.method == 'POST':

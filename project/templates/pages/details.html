@@ -4,6 +4,15 @@
 
 {% block style %}
 <link rel="stylesheet" href="{% static 'styles/details.css' %}" />
+<style>
+  .fa-heart {
+      font-size: 24px;
+      color: #ccc;
+  }
+  .fa-heart .loved {
+      color: red;
+  }
+</style>
 {% endblock style %}
 
 {% block title %}
@@ -29,7 +38,7 @@ Chapterfly - {{book.name}}
       {% csrf_token %}
       <input type="hidden" name="book-id" value="{{ book.id }}">
       <input type="hidden" name="add-to-wishlist" value="true">    
-      <button id="love-button" onclick="addLove(event)">Love</button>
+      <button id="love-button">{{ 'Loved' if is_loved else 'Love' }} <i class="fa-solid fa-heart {{'loved' if is_loved else ''}}"></i></button>
     </form>
 
     <a href="{% url 'view' %}" class="back">Back to Books</a>
@@ -37,6 +46,7 @@ Chapterfly - {{book.name}}
     <script src="{% static 'javascript/cart.js' %}"></script>
     <script >
       function getCookie(name) {
+        console.log(name+" first of get cookie function");
         var cookieValue = null;
         if (document.cookie && document.cookie !== '') {
             var cookies = document.cookie.split(';');
@@ -48,30 +58,36 @@ Chapterfly - {{book.name}}
                 }
             }
         }
+        console.log(name+" last of get cookie function");
         return cookieValue;
     }
     
-    function addLove(event) {
+    const loveButton = document.getElementById('love-button');
+    loveButton.addEventListener('click', (event) => {
+      console.log(" first of add love function");
       event.preventDefault();
       var bookId = document.querySelector('#love-form input[name="book-id"]').value;
   
       var xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function() {
-          if (this.readyState === 4 && this.status === 200) {
-              var response = JSON.parse(this.responseText);
-              if (response.status === 'success') {
-                document.getElementById('love-button').innerText = 'Loved';
+        if (this.readyState === 4 && this.status === 200) {
+            var response = JSON.parse(this.responseText);
+            if (response.status === 'success') {
+                loveButton.innerHTML = 'Loved <i class="fa-solid fa-heart loved"></i>';
                 alert('Added to your loved books');
-              } else if (response.status === 'already_in_wishlist') {
-                  alert('This book is already in your loved books');
-              }
-          }
-      };
-      xhttp.open("POST", "/add_love/", true);
+            } else if (response.status === 'already_in_wishlist') {
+                loveButton.innerHTML = 'Loved <i class="fa-solid fa-heart loved"></i>';
+                alert('This book is already in your loved books');
+            }
+        }
+    };
+      console.log(" last of add love function");
+      xhttp.open("POST", "{% url 'add_love' %}", true);
       xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
       xhttp.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
       xhttp.send("book-id=" + bookId);
-  }
+      console.log(" end of add love function");
+  })
     </script>
     </div>
 {% endblock content %}

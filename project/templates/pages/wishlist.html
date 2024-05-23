@@ -10,5 +10,10 @@ Chapterfly - Wishlist
 {% endblock title %}
 
 {% block content %}
-
+<h1>Your Wishlist</h1>
+<ul>
+    {% for item in wishlist_items %}
+    <li>{{ item.book.name }}</li>
+    {% endfor %}
+</ul>
 {% endblock %}
