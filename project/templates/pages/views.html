@@ -12,7 +12,7 @@ Chapterfly - View
 
 {% block content %}
         <!-- SEARCH FORM -->
-        <form method="GET" class="form-inline" action="">
+        <form method="GET" class="form-inline" action="" id="searchBar">
             <div class="input-group">
                 <input type="search" class="form-control" name="search-name" onkeyup="showResults(this.value)">
                 <div class="input-group-append">
@@ -137,20 +137,36 @@ Chapterfly - View
             });
         {% endfor %}
         function showResults(str) {
-            if (str.length === 0) {
-                document.getElementById("search-results").innerHTML = "";
-                return;
-            }
-        
-            const xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function() {
-                if (this.readyState === 4 && this.status === 200) {
-                    document.getElementById("search-results").innerHTML = this.responseText;
+                if (str.length === 0) {
+                    document.getElementById("search-results").innerHTML = "";
+                    return;
                 }
-            };
-            xhttp.open("GET", "/view/?search-name=" + str, true);
-            xhttp.send();
-        }
+
+                const xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function() {
+                    if (this.readyState === 4 && this.status === 200) {
+                        // Create a temporary container for the response
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = this.responseText;
+
+                        // Interact with the new content using tempDiv
+                        const header = tempDiv.querySelector("#header");
+                        if (header) {
+                            header.innerHTML = "";
+                        }
+                        const searchBar = tempDiv.querySelector("#searchBar");
+                        if (searchBar) {
+                            searchBar.innerHTML = "";
+                        }
+
+                        // Once done with manipulations, insert the content into the actual DOM
+                        document.getElementById("search-results").innerHTML = tempDiv.innerHTML;
+                    }
+                };
+        xhttp.open("GET", "/view/?search-name=" + str, true);
+        xhttp.send();
+    }
+
     </script>        
     <script src="{% static 'javascript/cart.js' %}"></script>
 {% endblock content %}
