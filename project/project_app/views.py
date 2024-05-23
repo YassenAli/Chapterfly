@@ -140,7 +140,7 @@ def add_love(request):
 
 def wishlist(request):
     context = {
-        'wishlist_items': Profile.objects.get(user=request.user).wishlist.all(),
+        'wishlist_items': Signup.wishlist.get(user=request.user).wishlist.all(),
     }
     return render(request, 'pages/wishlist.html', context)
     
