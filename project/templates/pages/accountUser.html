@@ -2,25 +2,19 @@
 {% load static %}
 
 {% block content %}
-    <title>account</title>
-    <link rel="stylesheet" href="{% static 'styles/account.css'%}">
+<title>Account</title>
+<link rel="stylesheet" href="{% static 'styles/account.css' %}">
 <div id="bd-title"><h2 class="main-title">Profile</h2></div>
 <div class="profileBody container">
     <div id="userProfile" class="container">
-        <!--profile settings-->
-        <table>
-            <thead>
-                <div id="profileSection">
-                    <div id="profilePic">
-                        <img id="profileImg" src="{% static 'images/profilePic.jpg' %}" alt="Profile Picture">
-                    </div>
-                    <td><h2 id="username-profile">{{ name|default:'user'|capfirst }}</h2></td>
-                </div>
-            </thead>
-            <tfoot>
-                <button id="changePhotoBtn" onclick="changePhoto()">Choose image</button>
-            </tfoot>
-        </table>
+        <!-- Profile settings -->
+        <div id="profileSection">
+            <div id="profilePic">
+                <img id="profileImg" src="{{ profile_picture }}" alt="Profile Picture">
+            </div>
+            <h2 id="username-profile">{{ username|default:'user'|capfirst }}</h2>
+        </div>
+        <button id="changePhotoBtn" onclick="changePhoto()">Choose image</button>
     </div>
 </div>
 <h3 id="manage-book" class="main-title">Your books</h3>
@@ -39,9 +33,4 @@
     <button id="log-out" onclick="logout()">Log Out</button>
 </div>
 <script src="{% static 'javascript/account.js' %}"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        getPhoto();
-    });
-</script>
 {% endblock content %}
