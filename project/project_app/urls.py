@@ -15,5 +15,7 @@ urlpatterns = [
     path('borrow/<int:book_id>/', views.borrow_book, name='borrow_book'),
     path('wishlist/', views.wishlist, name='wishlist'),
     path('logout/', views.logout, name='logout'),
+    path('get_profile_picture/', views.get_profile_picture_ajax, name='get_profile_picture'),
+    path('update_profile_photo_ajax/', views.update_profile_photo_ajax, name='update_profile_photo_ajax'),
 
 ]
