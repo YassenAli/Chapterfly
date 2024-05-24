@@ -5,11 +5,11 @@
 {% block style %}
 <link rel="stylesheet" href="{% static 'styles/views.css' %}" />
 <link rel="stylesheet" href="{% static 'styles/searchStyle.css' %}">
-{% endblock %}
+{% endblock style %}
 
 {% block title %}
 Chapterfly - View
-{% endblock %}
+{% endblock title %}
 
 {% block content %}
         <!-- SEARCH FORM -->
@@ -28,11 +28,12 @@ Chapterfly - View
         <div class="row">
         <ul class="nav">
             {% for cat in category|slice:'6' %}
-            <li class="nav-item cat{{cat.id}}">
-                <a href="#" class="nav-link bg-primary">{{cat.name}}</a>
-            </li>
+            <a href="#" class="nav-link bg-primary">
+            <li class="nav-item cat{{cat.id}}">{{cat.name}}</li>
+            </a>
             {% endfor %}
         </ul>
+
         </div>
         {%if not is_admin%}
         <div id="user" class="hidden">        

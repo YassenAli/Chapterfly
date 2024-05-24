@@ -1,0 +1,59 @@
+:root {
+  --main-transition-duration: 0.3s;
+
+  --primary: #333a73;
+  --secondary: #378ce7;
+  --accent1: #67c6e3;
+  --accent2: #f9f2e7;
+  --accent3: #f08080;
+  --bgcolor: #effafc;
+
+  --main-box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+}
+.input-group {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+.input-group .form-control {
+  margin-right: 20px;
+  border-radius: 5px;
+  border: 2px solid var(--primary);
+  background-color: var(--bgcolor);
+  width: 230px;
+}
+.input-group-append button {
+  width: 50px;
+  height: 28px;
+  background-color: var(--primary);
+  border-radius: 5px;
+}
+.input-group-append i {
+  color: white;
+  font-size: 18px;
+}
+
+.row .nav {
+  display: grid;
+  grid-template-columns: repeat(3, calc(60% / 3));
+  margin: 50px;
+  justify-content: center;
+}
+.row .nav a{
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+}
+.row .nav a li {
+  margin-right: 40px;
+  color: white;
+  background-color: var(--primary);
+  padding: 3px 10px;
+  text-align: center;
+  border-radius: 10px;
+  transition: var(--main-transition-duration);
+}
+.row .nav a li:hover {
+  color: var(--primary);
+  background-color: var(--accent1);
+}
