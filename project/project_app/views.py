@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
-from .forms import BookForm, CategoryForm, CheckoutForm, EditBookForm , SignupForm , loginForm
+from .forms import BookForm, CategoryForm, CheckoutForm, EditBookForm , SignupForm , loginForm, ProfilePhotoForm
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.contrib import messages
-
+import json
 
 # Create your views here.
 
@@ -140,6 +140,37 @@ def get_profile_picture(username):
     profile_picture_url = user.profilePicture.url
     return profile_picture_url
 
+def get_profile_picture_ajax(request):
+    if request.method == 'POST' and request.is_ajax():
+        try:
+            data = json.loads(request.body)
+            username = data.get('username')
+            if not username:
+                return JsonResponse({'error': 'Username not provided'}, status=400)
+
+            user = Signup.objects.get(username=username)
+            profile_picture_url = user.profilePicture.url
+            return JsonResponse({'profile_picture_url': profile_picture_url})
+        except Signup.DoesNotExist:
+            return JsonResponse({'error': 'User does not exist'}, status=404)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    return JsonResponse({'error': 'Invalid request'}, status=400)
+
+def update_profile_photo_ajax(request):
+    if request.method == 'POST':
+        form = ProfilePhotoForm(request.POST, request.FILES)
+        if form.is_valid():
+            user = request.user
+            user.profile_photo = form.cleaned_data['profile_photo']
+            user.save()
+            profile_picture_url = user.profile_photo.url
+            return JsonResponse({'profile_picture_url': profile_picture_url})  # Return the URL in the JSON response
+        else:
+            return JsonResponse({'errors': form.errors}, status=400)
+    else:
+        return JsonResponse({'error': 'Invalid request method'}, status=400)
+
 
 def borrow_book(book_id):
     book = get_object_or_404(Book, pk=book_id)
@@ -192,16 +223,30 @@ def LoginSignup(request):
 # def home(request):
 #     return render(request, "pages/main.html", {})
 
+
 def account(request):
     if request.session.get('isLogged'):
         username = request.session.get('username', 'default')
+        user = Signup.objects.get(username=username)
+        profile_picture_url = user.profilePicture.url if user.profilePicture else None
+
+        if request.method == 'POST':
+            profile_photo_form = ProfilePhotoForm(request.POST, request.FILES, instance=user)
+            if profile_photo_form.is_valid():
+                profile_photo_form.save()
+                messages.success(request, 'Profile photo updated successfully.')
+                return redirect('account')
+        else:
+            profile_photo_form = ProfilePhotoForm(instance=user)
+
         context = {
-            'username': username
+            'username': username,
+            'profilePicture': profile_picture_url,
+            'profilePhotoForm': profile_photo_form,
         }
         return render(request, 'pages/accountUser.html', context)
     else:
         return redirect('LoginSignup')
-
 
 def logout(request):
     request.session['isLogged'] = False
