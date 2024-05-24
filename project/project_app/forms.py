@@ -85,3 +85,8 @@ class loginForm(forms.Form):
         widget=forms.PasswordInput(attrs={'placeholder': 'password', 'class': 'form_field'}),
         label=''
     )
+
+class ProfilePhotoForm(forms.ModelForm):
+    class Meta:
+        model = Signup
+        fields = ['profilePicture']
