@@ -193,12 +193,14 @@ def LoginSignup(request):
 #     return render(request, "pages/main.html", {})
 
 def account(request):
-    username = request.session.get('username', 'default')
-    context = {
-        'username': username
-    }
-    return render(request, 'pages/accountUser.html', context)
-
+    if request.session.get('isLogged'):
+        username = request.session.get('username', 'default')
+        context = {
+            'username': username
+        }
+        return render(request, 'pages/accountUser.html', context)
+    else:
+        return redirect('LoginSignup')
 
 
 def logout(request):
