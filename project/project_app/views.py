@@ -61,16 +61,6 @@ def cart(request):
 def main(request):
     return render(request, 'pages/main.html')
 
-def account(request):
-    #get username
-    #get profile picture
-    context = { #will be updated after setting a model for acc data
-        # 'name' : 'default'
-        #'username' : username
-        #'profilepic' : profilepic
-    }
-    return render(request, 'pages/accountUser.html', context)
-
 def edit_book(request, book_id):
     book = get_object_or_404(Book, id=book_id)
     if request.method == 'POST':
@@ -182,7 +172,8 @@ def LoginSignup(request):
                     signup_user = Signup.objects.get(username=username)
                     if signup_user.password == password: 
 
-                        request.session['user_id'] = signup_user.id 
+                        request.session['user_id'] = signup_user.id
+                        request.session['username'] = signup_user.username
                         request.session['is_admin'] = signup_user.isAdmin
                         request.session['isLogged'] = True
                         return redirect('view')
@@ -200,6 +191,15 @@ def LoginSignup(request):
 
 # def home(request):
 #     return render(request, "pages/main.html", {})
+
+def account(request):
+    username = request.session.get('username', 'default')
+    context = {
+        'username': username
+    }
+    return render(request, 'pages/accountUser.html', context)
+
+
 
 def logout(request):
     request.session['isLogged'] = False
