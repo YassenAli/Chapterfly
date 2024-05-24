@@ -13,7 +13,9 @@ Chapterfly - Wishlist
 <h1>Your Wishlist</h1>
 <ul>
     {% for item in wishlist_items %}
-    <li>{{ item.book.name }}</li>
+    <li>{{ item.name }}</li>
+    {% empty %}
+    <li>Your wishlist is empty.</li>
     {% endfor %}
 </ul>
 {% endblock %}

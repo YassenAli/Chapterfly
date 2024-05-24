@@ -44,7 +44,7 @@ Chapterfly - {{book.name}}
         {% else %}
           Love
         {% endif %}
-        <i class="fa-solid fa-heart {% if is_loved %}'loved'{% endif %}"></i>
+        <i class="fa-solid fa-heart {% if is_loved %}loved{% endif %}"></i>
       </button>
     </form>
 
@@ -53,7 +53,6 @@ Chapterfly - {{book.name}}
     <script src="{% static 'javascript/cart.js' %}"></script>
     <script >
       function getCookie(name) {
-        console.log(name+" first of get cookie function");
         var cookieValue = null;
         if (document.cookie && document.cookie !== '') {
             var cookies = document.cookie.split(';');
@@ -65,13 +64,11 @@ Chapterfly - {{book.name}}
                 }
             }
         }
-        console.log(name+" last of get cookie function");
         return cookieValue;
     }
     
     const loveButton = document.getElementById('love-button');
     loveButton.addEventListener('click', (event) => {
-      console.log(" first of add love function");
       event.preventDefault();
       var bookId = document.querySelector('#love-form input[name="book-id"]').value;
   
@@ -88,12 +85,10 @@ Chapterfly - {{book.name}}
             }
         }
     };
-      console.log(" last of add love function");
       xhttp.open("POST", "{% url 'add_love' %}", true);
       xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
       xhttp.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
       xhttp.send("book-id=" + bookId);
-      console.log(" end of add love function");
   })
     </script>
     </div>

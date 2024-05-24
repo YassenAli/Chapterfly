@@ -130,13 +130,21 @@ Chapterfly - View
     {%endif%}
     {% comment %} Scripts {% endcomment %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{% static 'javascript/cart.js' %}"></script>
     <script>
-        {% for book in books %}
+        $(document).ready(function() {
+            $('ul.nav').on('click', 'li.nav-item', function() {
+                var categoryId = $(this).attr('class').match(/cat(\d+)/)[1];
+                $(".bookhide").hide();
+                $(".book" + categoryId).show();
+            });
+        });
+        /*{% for book in books %}
             $(".cat{{book.category.id}}").click(function(){
                 $(".bookhide").hide();
                 $(".book{{book.category.id}}").show();
             });
-        {% endfor %}
+        {% endfor %}*/
         function showResults(str) {
                 if (str.length === 0) {
                     // document.getElementById("books").innerHTML = books.innerHTML;
@@ -163,7 +171,6 @@ Chapterfly - View
     }
 
     </script>        
-    <script src="{% static 'javascript/cart.js' %}"></script>
 {% endblock content %}
 {% block extra_scripts %}
 {% comment %}

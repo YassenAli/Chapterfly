@@ -129,11 +129,20 @@ def add_love(request):
     return HttpResponseBadRequest()
 
 def wishlist(request):
+    user_name = request.session.get('username')
+    
+    if not user_name:
+        return redirect('LoginSignup')
+    
+    user = Signup.objects.get(username=user_name)
+    wishlist_items = user.wishlist.all()
+
+    print(f"Wishlist items: {wishlist_items}")
+
     context = {
-        'wishlist_items': Signup.objects.get(id=request.session.get('user_id')).wishlist.all(),
+        'wishlist_items': wishlist_items,
     }
     return render(request, 'pages/wishlist.html', context)
-    
 
 def get_profile_picture(username):
     user = Signup.objects.get(username=username)
