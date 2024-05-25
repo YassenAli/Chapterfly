@@ -1,4 +1,13 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+    {% comment %} <link rel="stylesheet" href="{% static 'styles/add_book.css' %}" /> {% endcomment %}
+{% endblock style %}
+
+{% block title %}
+    Edit Book
+{% endblock %}
 
 {% block content %}
 
