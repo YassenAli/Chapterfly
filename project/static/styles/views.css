@@ -352,20 +352,8 @@ search{
     background-color: #58a3da;
     color: white;
   }
-
-  .Buttons {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  
-  .delete:hover {
-    background-color: #c60000;
-    color: white;
-  }
-  
   #edit:hover {
-    background-color: #46d74b;
+    background-color: #4caf4fc3;
   }
 
   /* End Admin */

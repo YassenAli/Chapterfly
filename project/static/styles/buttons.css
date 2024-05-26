@@ -1,0 +1,40 @@
+.EditDelete {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+.delete{
+    background-color: #ef161a; 
+    margin-top: 20px;
+    right: 50%;
+    border: none; 
+    color: white; 
+    padding: 5px 5px;
+    text-align: center; 
+    text-decoration: none;
+    display: inline-block; 
+    font-size: 14px; 
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+  .delete:hover {
+    background-color: #ef161aa7; 
+    color: white;
+  }
+  
+.edit{
+    background-color: #4caf50; 
+    margin-top: 20px;
+    right: 50%;
+    border: none; 
+    color: white; 
+    padding: 5px 15px;
+    text-align: center; 
+    text-decoration: none;
+    display: inline-block; 
+    font-size: 14px; 
+    cursor: pointer;
+    border-radius: 4px;
+}

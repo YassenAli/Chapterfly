@@ -5,9 +5,7 @@
 {% block style %}
 <link rel="stylesheet" href="{% static 'styles/views.css' %}" />
 <link rel="stylesheet" href="{% static 'styles/searchStyle.css' %}">
-<style>
-    
-</style>
+<link rel="stylesheet" href="{% static 'styles/buttons.css' %}">
 {% endblock %}
 
 {% block title %}
@@ -15,7 +13,7 @@ Chapterfly - View
 {% endblock %}
 
 {% block content %}
-        <!-- SEARCH FORM -->
+        {% comment %} SEARCH FORM  {% endcomment %}
         <form method="GET" class="form-inline" action="" id="searchBar">
             <div class="input-group">
                 <input type="search" class="form-control" name="search-name" onkeyup="showResults(this.value)" title="Search for book">
@@ -101,35 +99,19 @@ Chapterfly - View
             <tbody>
                 {% comment %} books items will be dynamically added here  {% endcomment %}
                 {% for book in books %}
-                <tr class="bookhide book{{book.category.id}}">
-                    <td>{{book.id}}</td>
-                    <td>{{book.name}}</td>
-                    <td>{{book.author}}</td>
-                    <td>{{book.category}}</td>
-                    <td>{{book.description}}</td>
-                    <td class="EditDelete">
-                        <a href="{% url 'edit_book' book.id %}" class="edit" style="
-                        right: 50%;
-                        margin-top: 20px;
-                        /* transform: translateX(-50%); */
-                        background-color: #4caf50;
-                        color: #fff;
-                        padding: 5px 5px;
-                        border: none;
-                        border-radius: 4px;
-                        cursor: pointer; /* Change cursor to pointer on hover */">Edit</a>
-                        <a href="{% url 'delete_book' book.id %}" class="delete" style="width: 50px;
-                        float: right;
-                        margin-right: 10px;
-                        margin-top: 10px;
-                        background-color: #ff0000;
-                        color: white;
-                        padding: 5px 5px;
-                        border: none;
-                        border-radius: 4px;
-                        cursor: pointer;">Delete</a>
-                    </td>
-                </tr>
+                    {% if book.status == 'available' %}
+                        <tr class="bookhide book{{book.category.id}}">
+                            <td>{{book.id}}</td>
+                            <td>{{book.name}}</td>
+                            <td>{{book.author}}</td>
+                            <td>{{book.category}}</td>
+                            <td>{{book.description}}</td>
+                            <td class="EditDelete">
+                                <a href="{% url 'edit_book' book.id %}" class="edit">Edit</a>
+                                <a href="{% url 'delete_book' book.id %}" class="delete">Delete</a>
+                            </td>
+                        </tr>
+                    {% endif %}
                 {% endfor %}
             </tbody>
 

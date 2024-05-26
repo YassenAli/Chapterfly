@@ -40,7 +40,7 @@ class CheckoutForm(forms.ModelForm):
             'card_number': forms.NumberInput(attrs={'maxlength': '17', 'minlength': '17', 'size': '17', 'type': 'text', 'class': 'form-control form-control-lg', 'placeholder': '1234 5678 9012 3457', 'id': 'typeTextCardnum'}),
             # 'card_type': forms.Select(),
             'expiration_date': forms.DateInput(attrs={'maxlength': '7', 'minlength': '7', 'size': '7', 'type': 'text', 'class': 'form-control form-control-lg', 'placeholder': 'MM/YYYY', 'id': 'typeExp'}),
-            'cvv': forms.NumberInput(attrs={'maxlength': '3', 'minlength': '3', 'size': '1', 'type': 'password', 'class': 'form-control form-control-lg typeText', 'placeholder': '***', 'id': 'typeText'}),
+            'cvv': forms.NumberInput(attrs={'maxlength': '3', 'minlength': '3', 'size': '1', 'type': 'password', 'class': 'form-control form-control-lg typeText', 'placeholder': '●●●', 'id': 'typeText'}),
         }
 
 class EditBookForm(forms.ModelForm):
