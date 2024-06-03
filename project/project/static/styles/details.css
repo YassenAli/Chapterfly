@@ -92,3 +92,8 @@ body {
    font-size: 17px;
    margin-left: 10px;
 }
+#back-btn {
+    font-size: 14px;
+    text-decoration: none;
+    color: var(--primary);
+}
