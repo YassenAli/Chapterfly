@@ -331,9 +331,8 @@ search {
 /********************************************* Admin *****************************************/
 #bookTable {
   border-collapse: collapse;
-  /* width: 100%; */
-  max-width: 90%;
-  margin: 0 auto;
+  width: 80%;
+  margin: 50px auto;
 }
 
 #bookTable th,
@@ -344,7 +343,7 @@ search {
 }
 
 #bookTable tr:nth-child(even) {
-  background-color: #f2f2f2;
+  background-color: var(--bgcolor);
 }
 
 #bookTable tr:hover {
@@ -354,8 +353,9 @@ search {
 #bookTable th {
   padding-top: 12px;
   padding-bottom: 12px;
-  text-align: left;
-  background-color: #58a3da;
+  font-weight: bold;
+  text-align: center;
+  background-color: var(--primary);
   color: white;
 }
 
@@ -363,11 +363,47 @@ search {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: 70%;
+}
+.EditDelete {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.delete{
+  background-color: #ef161a; 
+  margin-top: 20px;
+  right: 50%;
+  border: none; 
+  color: white; 
+  padding: 5px 5px;
+  text-align: center; 
+  text-decoration: none;
+  display: inline-block; 
+  font-size: 14px; 
+  cursor: pointer;
+  border-radius: 4px;
 }
 
 .delete:hover {
-  background-color: #c60000;
+  background-color: #ef161aa7; 
   color: white;
+}
+
+.edit{
+  background-color: #4caf50; 
+  margin-top: 20px;
+  right: 50%;
+  border: none; 
+  color: white; 
+  padding: 5px 15px;
+  text-align: center; 
+  text-decoration: none;
+  display: inline-block; 
+  font-size: 14px; 
+  cursor: pointer;
+  border-radius: 4px;
 }
 
 #edit:hover {
