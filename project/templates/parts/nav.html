@@ -10,8 +10,10 @@
         <li><a href="/#footer">Contact us</a></li>
         <li><a href="{% url 'account' %}">Account</a></li>
         <li><a href="{% url 'LoginSignup' %}">Login / Signup</a></li>
+        {% if not is_admin and isLogged%}
         <li><a href="{% url 'cart' %}">My cart</a></li>
         <li><a href="{% url 'wishlist' %}">Wishlist</a></li>
+        {%endif%}
         <li><a href="{% url 'view' %}" class="discover">Discover</a></li>
       </ul>
     </div>
