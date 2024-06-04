@@ -17,5 +17,7 @@ urlpatterns = [
     path('logout/', views.logout, name='logout'),
     path('get_profile_picture/', views.get_profile_picture_ajax, name='get_profile_picture'),
     path('update_profile_photo_ajax/', views.update_profile_photo_ajax, name='update_profile_photo_ajax'),
+    path('navbarAdmin/', views.navbarAdmin ,name='navbarAdmin' ),
+
 
 ]
