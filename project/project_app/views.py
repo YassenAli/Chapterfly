@@ -49,17 +49,29 @@ def add_book(request):
     return render(request, 'pages/add_book.html', context)
 
 def cart(request):
+    isLogged = request.session.get('isLogged')
+    is_admin = request.session.get('is_admin')
+
     if request.method == 'POST':
         form = CheckoutForm(request.POST)
         if form.is_valid():
             return redirect('account')
     context = {
         'form': CheckoutForm(),
+        'isLogged':isLogged,
+        'is_admin':is_admin,
     }
     return render(request, 'pages/cart.html', context)
 
 def main(request):
-    return render(request, 'pages/main.html')
+    isLogged = request.session.get('isLogged')
+    is_admin = request.session.get('is_admin')
+    context = {
+        'isLogged':isLogged,
+        'is_admin':is_admin,
+    }
+
+    return render(request, 'pages/main.html' , context)
 
 def edit_book(request, book_id):
     book = get_object_or_404(Book, id=book_id)
@@ -129,6 +141,9 @@ def add_love(request):
     return HttpResponseBadRequest()
 
 def wishlist(request):
+    isLogged = request.session.get('isLogged')
+    is_admin = request.session.get('is_admin')
+
     user_name = request.session.get('username')
     
     if not user_name:
@@ -141,6 +156,8 @@ def wishlist(request):
 
     context = {
         'wishlist_items': wishlist_items,
+        'isLogged':isLogged,
+        'is_admin':is_admin,
     }
     return render(request, 'pages/wishlist.html', context)
 
@@ -234,6 +251,8 @@ def LoginSignup(request):
 
 
 def account(request):
+    isLogged = request.session.get('isLogged')
+    is_admin = request.session.get('is_admin')
     if request.session.get('isLogged'):
         username = request.session.get('username', 'default')
         user = Signup.objects.get(username=username)
@@ -252,6 +271,8 @@ def account(request):
             'username': username,
             'profilePicture': profile_picture_url,
             'profilePhotoForm': profile_photo_form,
+            'isLogged':isLogged,
+            'is_admin':is_admin,
         }
         return render(request, 'pages/accountUser.html', context)
     else:
@@ -260,3 +281,13 @@ def account(request):
 def logout(request):
     request.session['isLogged'] = False
     return redirect('LoginSignup') 
+
+
+def navbarAdmin(request):
+    isLogged = request.session.get('isLogged')
+    is_admin = request.session.get('is_admin')
+    context = {
+        'is_admin' : is_admin,
+        'isLogged' : isLogged,
+    }
+    return render(request, 'parts/nav.html', context)
