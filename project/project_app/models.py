@@ -52,7 +52,8 @@ class Signup(models.Model):
     confirmPassword = models.CharField(max_length=20)
     isAdmin = models.BooleanField(default=False)
     profilePicture = models.ImageField(default='default.jpg', upload_to='profilePictures')
-    wishlist = models.ManyToManyField(Book)
+    wishlist = models.ManyToManyField(Book, related_name='wishlist_items')
+    cart = models.ManyToManyField(Book, related_name='cart_items')
 
     def __str__(self):
         return self.username

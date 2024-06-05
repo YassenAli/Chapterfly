@@ -22,7 +22,43 @@ My Cart
                 <h2 class="title main-title">Books Cart</h2>
                 <div class="table-responsive form-group" id="cart_cont">
                     {% comment %}Cart items will be dynamically added here {% endcomment %}
-                    <p class="empty">Your books cart is empty!</p>
+                    {% if cart_items %}
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <td class="text-center">Image</td>
+                            <td class="text-left">Book Name</td>
+                            <td class="text-left">Category</td>
+                            <td class="text-center">Price</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in cart_items %}
+                        <tr>
+                            <td class="text-center">
+                                <a href="{% url 'details' item.id %}">
+                                    <img src="{% if book.img %} {{book.img.url}} {% else %} https://placehold.co/200x300 {% endif %}" alt="{{ item.name }}" title="{{ item.name }}"
+                                         class="img-thumbnail" style="width: 100px; height: 100px;"/>
+                                </a>
+                            </td>
+                            <td class="text-left">
+                                <a href="{% url 'details' item.id %}">{{ item.name }}</a>
+                            </td>
+                            <td class="text-left">{{ item.category }}</td>
+                            <td class="text-right">{{ item.price }} LE</td>
+                            <td class="text-right">
+                                <button type="button" class="btn btn-danger btn-sm remove-from-cart"
+                                        data-id="{{ item.id }}">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                     {% else %}
+                        <p class="empty">Your books cart is empty!</p>
+                    {% endif %}
                 </div>
                 <div class="row">
                     <div class="col-sm-4 col-sm-offset-8">
@@ -33,7 +69,7 @@ My Cart
                                     <strong>Count items:</strong>
                                 </td>
                                 <td class="text-right">
-                                    <span id="cart_number">0</span>
+                                    <span id="cart_number">{{ count_itmes }}</span>
                                 </td>
                             </tr>
                             <tr>
@@ -41,7 +77,7 @@ My Cart
                                     <strong>Total:</strong>
                                 </td>
                                 <td class="text-right">
-                                    <span id="cart_price">0 LE</span>
+                                    <span id="cart_price">{{ total_price }} LE</span>
                                 </td>
                             </tr>
                             </tbody>
@@ -104,7 +140,7 @@ My Cart
 
                             <div class="d-flex justify-content-between mb-4">
                                 <p class="mb-2">Total </p>
-                                <p class="mb-2" id="checkout_price">00.00 LE</p>
+                                <p class="mb-2" id="checkout_price">{% if total_price %} {{ total_price }} {% else %} 00.00 {% endif %} LE</p>
                             </div>
     
                             <button type="submit" data-mdb-button-init data-mdb-ripple-init
@@ -123,12 +159,25 @@ My Cart
     </div>
 </div>
 <br>
-<script src="{% static 'javascript/cart.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    window.onload = updateCart();
-    document.getElementById('checkout-form').addEventListener('submit', function(event) {
-        event.preventDefault();
-        checkout();
+    $(document).on('click', '.remove-from-cart', function() {
+        var itemId = $(this).data('id');
+        $.ajax({
+            type: 'POST',
+            url: '{% url "remove_from_cart" %}',
+            data: {
+                'item_id': itemId,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function(response) {
+                // Refresh the cart section and total price and total counts after successful deletion
+                $('#cart_cont').load(location.href + ' #cart_cont');
+                $('#checkout_price').load(location.href + ' #checkout_price');
+                $('#cart_number').load(location.href + ' #cart_number');
+                $('#cart_price').load(location.href + ' #cart_price');
+            }
+        });
     });
 </script>
 {% endblock content %}

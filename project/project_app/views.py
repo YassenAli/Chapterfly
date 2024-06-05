@@ -4,6 +4,7 @@ from .forms import BookForm, CategoryForm, CheckoutForm, EditBookForm , SignupFo
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.contrib import messages
 import json
+from django.db.models import Sum
 
 # Create your views here.
 
@@ -51,18 +52,40 @@ def add_book(request):
 def cart(request):
     isLogged = request.session.get('isLogged')
     is_admin = request.session.get('is_admin')
-
+    user_id = request.session.get('user_id')
+    user_cart = Signup.objects.get(id=user_id).cart.all()
+    total_price = user_cart.aggregate(total_price=Sum('price'))['total_price'] or 0
+    count_items = user_cart.count()
+    
+    if isLogged is False :
+        return redirect('LoginSignup')
+    
     if request.method == 'POST':
         form = CheckoutForm(request.POST)
         if form.is_valid():
             return redirect('account')
+        
     context = {
         'form': CheckoutForm(),
         'isLogged':isLogged,
         'is_admin':is_admin,
+        'cart_items': user_cart,
+        'total_price': total_price,
+        'count_itmes': count_items,
     }
     return render(request, 'pages/cart.html', context)
 
+def remove_from_cart(request):
+    if request.method == 'POST' and 'item_id' in request.POST:
+        user_id = request.session.get('user_id')
+        signup_user = Signup.objects.get(id=user_id)
+        book_id = request.POST['item_id']
+        book = Book.objects.get(id=book_id)
+        signup_user.cart.remove(book)
+        return JsonResponse({'message': 'Book removed from cart.'})
+    else:
+        return JsonResponse({'error': 'Invalid request.'}, status=400)
+    
 def main(request):
     isLogged = request.session.get('isLogged')
     is_admin = request.session.get('is_admin')
@@ -118,6 +141,14 @@ def details(request, id):
     }
     return render(request, 'pages/details.html', context)
 
+def add_to_cart(request, book_id):
+    if request.method == 'POST':
+        book = get_object_or_404(Book, id=book_id)
+        if 'user_id' in request.session:
+            signup_user = Signup.objects.get(id=request.session['user_id'])
+            if book not in signup_user.cart.all():
+                signup_user.cart.add(book)
+    return redirect('cart')
 
 def add_love(request):
     if request.method == 'POST':
