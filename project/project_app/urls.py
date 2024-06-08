@@ -20,6 +20,8 @@ urlpatterns = [
     path('get_profile_picture/', views.get_profile_picture_ajax, name='get_profile_picture'),
     path('update_profile_photo_ajax/', views.update_profile_photo_ajax, name='update_profile_photo_ajax'),
     path('navbarAdmin/', views.navbarAdmin ,name='navbarAdmin' ),
+    path('status/details/', views.status_details, name='status_details'),
+    path('status/views/', views.status_views, name='status_views'),
 
 
 ]
