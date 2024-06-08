@@ -309,18 +309,21 @@ def navbarAdmin(request):
         'isLogged' : isLogged,
     }
     return render(request, 'parts/nav.html', context)
-def borrow_book(request, book_id):
-    try:
-        book = Book.objects.get(id=book_id)
-    except Book.DoesNotExist:
-        return JsonResponse({'error': 'Book not found'}, status=404)
-
-    if book.status == 'available':
-        book.status = 'borrowed'
-        book.save()
+    
+def borrow_book(request, book_ids):
+    for book_id in book_ids:
+        try:
+            book = Book.objects.get(id=book_id)
+        except Book.DoesNotExist:
+            return JsonResponse({'error': 'Book not found'}, status=404)
+        else:
+            if book.status == 'available':
+                book.status = 'borrowed'
+                book.save()
         return JsonResponse({'message': 'Book successfully borrowed'})
     else:
         return JsonResponse({'error': 'Book is not available for borrowing'}, status=400)
+
 def status_details(request, book_id):
     if request.method == 'POST':
         new_status = request.POST.get('new_status')
