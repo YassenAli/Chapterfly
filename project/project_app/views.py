@@ -56,6 +56,8 @@ def cart(request):
     user_cart = Signup.objects.get(id=user_id).cart.all()
     total_price = user_cart.aggregate(total_price=Sum('price'))['total_price'] or 0
     count_items = user_cart.count()
+    cart_book_ids = [book.id for book in user_cart]
+
     
     if isLogged is False :
         return redirect('LoginSignup')
@@ -63,6 +65,7 @@ def cart(request):
     if request.method == 'POST':
         form = CheckoutForm(request.POST)
         if form.is_valid():
+            borrow_book(request, cart_book_ids)
             return redirect('account')
         
     context = {
@@ -310,7 +313,7 @@ def navbarAdmin(request):
     }
     return render(request, 'parts/nav.html', context)
     
-def borrow_book(book_ids):
+def borrow_book(request, book_ids):
     for book_id in book_ids:
         try:
             book = Book.objects.get(id=book_id)
