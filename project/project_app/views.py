@@ -192,10 +192,6 @@ def wishlist(request):
     }
     return render(request, 'pages/wishlist.html', context)
 
-def get_profile_picture(username):
-    user = Signup.objects.get(username=username)
-    profile_picture_url = user.profilePicture.url
-    return profile_picture_url
 
 def get_profile_picture_ajax(request):
     if request.method == 'POST' and request.is_ajax():
@@ -229,15 +225,6 @@ def update_profile_photo_ajax(request):
         return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 
-def borrow_book(book_id):
-    book = get_object_or_404(Book, pk=book_id)
-
-    if book.status == 'available':
-        book.status = 'borrowed'
-        book.save()
-        return ('Book successfully borrowed') #update to make it a json response
-    else:
-        return ('Book is not available for borrowing') #update to make it a json response
 
 def LoginSignup(request):
     if request.method == 'POST':
@@ -322,3 +309,42 @@ def navbarAdmin(request):
         'isLogged' : isLogged,
     }
     return render(request, 'parts/nav.html', context)
+def borrow_book(request, book_id):
+    try:
+        book = Book.objects.get(id=book_id)
+    except Book.DoesNotExist:
+        return JsonResponse({'error': 'Book not found'}, status=404)
+
+    if book.status == 'available':
+        book.status = 'borrowed'
+        book.save()
+        return JsonResponse({'message': 'Book successfully borrowed'})
+    else:
+        return JsonResponse({'error': 'Book is not available for borrowing'}, status=400)
+def status_details(request, book_id):
+    if request.method == 'POST':
+        new_status = request.POST.get('new_status')
+
+        try:
+            book = Book.objects.get(id=book_id)
+        except Book.DoesNotExist:
+            pass
+        else:
+            book.status = new_status
+            book.save()
+            return JsonResponse({'message': 'Status updated successfully'})
+    return HttpResponseBadRequest('Invalid request')
+
+def status_views(request, book_id):
+    if request.method == 'POST':
+        new_status = request.POST.get('new_status')
+
+        try:
+            book = Book.objects.get(id=book_id)
+        except Book.DoesNotExist:
+            pass
+        else:
+            book.status = new_status
+            book.save()
+            return JsonResponse({'message': 'Status updated successfully'})
+    return HttpResponseBadRequest('Invalid request')
