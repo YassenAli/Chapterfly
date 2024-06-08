@@ -310,7 +310,7 @@ def navbarAdmin(request):
     }
     return render(request, 'parts/nav.html', context)
     
-def borrow_book(request, book_ids):
+def borrow_book(book_ids):
     for book_id in book_ids:
         try:
             book = Book.objects.get(id=book_id)
