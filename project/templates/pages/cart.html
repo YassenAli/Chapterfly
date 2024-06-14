@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block style %}
-<link rel="stylesheet" href="{% static 'styles/cart.css' %}"/>
+<link rel="stylesheet" href="{% static 'styles/MyCart.css' %}"/>
 {% endblock %}
 
 {% block title %}
@@ -14,48 +14,43 @@ My Cart
 <div>
     <br>
     <br>
-
     <div class="main-container container">
-        <div class="row cart">
-            <input type="hidden" name="_token">
-            <div id="content" class="col-sm-12">
+            <div id="content" class="col-sm-12 cart_items">
                 <h2 class="title main-title">Books Cart</h2>
                 <div class="table-responsive form-group" id="cart_cont">
                     {% comment %}Cart items will be dynamically added here {% endcomment %}
                     {% if cart_items %}
-                    <table class="table table-bordered">
-                        <thead>
-                        <tr>
-                            <td class="text-center">Image</td>
-                            <td class="text-left">Book Name</td>
-                            <td class="text-left">Category</td>
-                            <td class="text-center">Price</td>
-                        </tr>
-                        </thead>
-                        <tbody>
                         {% for item in cart_items %}
-                        <tr>
-                            <td class="text-center">
+                        <div class = 'cart_item row mb-4 d-flex justify-content-between align-items-center' id="cart_item{{item.id}}">
+                            <div class="col-md-2 col-lg-2 col-xl-2">
                                 <a href="{% url 'details' item.id %}">
-                                    <img src="{% if book.img %} {{book.img.url}} {% else %} https://placehold.co/200x300 {% endif %}" alt="{{ item.name }}" title="{{ item.name }}"
-                                         class="img-thumbnail" style="width: 100px; height: 100px;"/>
+                                    <img src="{% if item.img %}{{item.img.url}}{% else %} https://placehold.co/200x300 {% endif %}" class="img-fluid rounded-3 cart_img" alt="{item.name}" style="width: 65px">
                                 </a>
-                            </td>
-                            <td class="text-left">
-                                <a href="{% url 'details' item.id %}">{{ item.name }}</a>
-                            </td>
-                            <td class="text-left">{{ item.category }}</td>
-                            <td class="text-right">{{ item.price }} LE</td>
-                            <td class="text-right">
+                            </div>
+                            <div class="col-md-3 col-lg-3 col-xl-3">
+                                <a href="{% url 'view' %}">
+                                    <h6 class="text-muted cart_category">{{item.category}}</h6>
+                                </a>
+                                <a href="{% url 'details' item.id %}">
+                                    <h6 class="text-black mb-0 cart_name">{{item.name}}</h6>
+                                </a>
+                            </div>
+                            <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                <h6 class='mb-0'>
+                                    ${{item.price}}
+                                </h6>
+                            </div>
+                            <div class = 'col-md-1 col-lg-1 col-xl-1 text-end'>
                                 <button type="button" class="btn btn-danger btn-sm remove-from-cart"
                                         data-id="{{ item.id }}">
                                     <i class="fa fa-trash"></i>
                                 </button>
-                            </td>
-                        </tr>
+                            </div>
+                        </div>
+                        {% if not forloop.last %}
+                            <hr>
+                        {% endif %}
                         {% endfor %}
-                        </tbody>
-                    </table>
                      {% else %}
                         <p class="empty">Your books cart is empty!</p>
                     {% endif %}
@@ -64,98 +59,95 @@ My Cart
                     <div class="col-sm-4 col-sm-offset-8">
                         <table class="table table-bordered">
                             <tbody>
-                            <tr>
-                                <td class="text-right">
-                                    <strong>Count items:</strong>
-                                </td>
-                                <td class="text-right">
-                                    <span id="cart_number">{{ count_itmes }}</span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-right">
-                                    <strong>Total:</strong>
-                                </td>
-                                <td class="text-right">
-                                    <span id="cart_price">{{ total_price }} LE</span>
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td class="text-right">
+                                        <strong>Count items:</strong>
+                                    </td>
+                                    <td class="text-right">
+                                        <span id="cart_number">{{ count_itmes }}</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right">
+                                        <strong>Total:</strong>
+                                    </td>
+                                    <td class="text-right">
+                                        <span id="cart_price">{{ total_price }} LE</span>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-        </div>
+            {% comment %}checkout {% endcomment %}
+            <div class="checkout">
+                <div class="col-lg-5">
 
-        {% comment %}checkout {% endcomment %}
-        <div class="checkout">
-            <div class="col-lg-5">
+                    <div class="card bg-primary text-white rounded-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h5 class="mb-0 h5">Checkout</h5>
+                            </div>
 
-                <div class="card bg-primary text-white rounded-3">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h5 class="mb-0 h5">Checkout</h5>
+                            <p class="small mb-2">Card type</p>
+                            <a href="#!" type="submit" class="text-white"><i
+                                    class="fab fa-cc-mastercard fa-2x me-2"></i></a>
+                            <a href="#!" type="submit" class="text-white"><i
+                                    class="fab fa-cc-visa fa-2x me-2"></i></a>
+                            <a href="#!" type="submit" class="text-white"><i
+                                    class="fab fa-cc-amex fa-2x me-2"></i></a>
+                            <a href="#!" type="submit" class="text-white"><i class="fab fa-cc-paypal fa-2x"></i></a>
+
+                            <form class="mt-4" method="POST" id="checkout-form">
+                                {% csrf_token %}
+                                <div data-mdb-input-init class="form-outline form-white mb-4">
+                                    {{ form.cardholder_name }}
+                                    <label class="form-label" for="typeName">Cardholder's Name</label>
+                                </div>
+
+                                <div data-mdb-input-init class="form-outline form-white mb-4">
+                                    {{ form.card_number }}
+                                    <label class="form-label" for="typeTextCardnum">Card Number</label>
+                                </div>
+
+                                <div class="row mb-4">
+                                    <div class="col-md-6">
+                                        <div data-mdb-input-init class="form-outline form-white">
+                                            {{ form.expiration_date }}
+                                            <label class="form-label" for="typeExp">Expiration</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div data-mdb-input-init class="form-outline form-white">
+                                            {% comment %} <input type="password" id="typeText"
+                                                class="form-control form-control-lg typeText"
+                                                placeholder="&#9679;&#9679;&#9679;" size="1" minlength="3" maxlength="3"
+                                                required/> {% endcomment %}
+                                            {{ form.cvv }}
+                                            <label class="form-label" for="typeText">Cvv</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="my-4">
+
+                                <div class="d-flex justify-content-between mb-4">
+                                    <p class="mb-2">Total </p>
+                                    <p class="mb-2" id="checkout_price">{% if total_price %} {{ total_price }} {% else %} 00.00 {% endif %} LE</p>
+                                </div>
+        
+                                <button type="submit" data-mdb-button-init data-mdb-ripple-init
+                                        class="btn btn-info btn-block btn-lg btn-checkout">
+                                    <div class="d-flex justify-content-between">
+                                        <span>Checkout <i
+                                                class="fas fa-long-arrow-alt-right ms-2"></i></span>
+                                    </div>
+                                </button>
+                            </form>
                         </div>
-
-                        <p class="small mb-2">Card type</p>
-                        <a href="#!" type="submit" class="text-white"><i
-                                class="fab fa-cc-mastercard fa-2x me-2"></i></a>
-                        <a href="#!" type="submit" class="text-white"><i
-                                class="fab fa-cc-visa fa-2x me-2"></i></a>
-                        <a href="#!" type="submit" class="text-white"><i
-                                class="fab fa-cc-amex fa-2x me-2"></i></a>
-                        <a href="#!" type="submit" class="text-white"><i class="fab fa-cc-paypal fa-2x"></i></a>
-
-                        <form class="mt-4" method="POST" id="checkout-form">
-                            {% csrf_token %}
-                            <div data-mdb-input-init class="form-outline form-white mb-4">
-                                {{ form.cardholder_name }}
-                                <label class="form-label" for="typeName">Cardholder's Name</label>
-                            </div>
-
-                            <div data-mdb-input-init class="form-outline form-white mb-4">
-                                {{ form.card_number }}
-                                <label class="form-label" for="typeTextCardnum">Card Number</label>
-                            </div>
-
-                            <div class="row mb-4">
-                                <div class="col-md-6">
-                                    <div data-mdb-input-init class="form-outline form-white">
-                                        {{ form.expiration_date }}
-                                        <label class="form-label" for="typeExp">Expiration</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div data-mdb-input-init class="form-outline form-white">
-                                        {% comment %} <input type="password" id="typeText"
-                                               class="form-control form-control-lg typeText"
-                                               placeholder="&#9679;&#9679;&#9679;" size="1" minlength="3" maxlength="3"
-                                               required/> {% endcomment %}
-                                        {{ form.cvv }}
-                                        <label class="form-label" for="typeText">Cvv</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <hr class="my-4">
-
-                            <div class="d-flex justify-content-between mb-4">
-                                <p class="mb-2">Total </p>
-                                <p class="mb-2" id="checkout_price">{% if total_price %} {{ total_price }} {% else %} 00.00 {% endif %} LE</p>
-                            </div>
-    
-                            <button type="submit" data-mdb-button-init data-mdb-ripple-init
-                                    class="btn btn-info btn-block btn-lg btn-checkout">
-                                <div class="d-flex justify-content-between">
-                                    <span>Checkout <i
-                                            class="fas fa-long-arrow-alt-right ms-2"></i></span>
-                                </div>
-                            </button>
-                        </form>
                     </div>
                 </div>
-
             </div>
-        </div>
     </div>
 </div>
 <br>

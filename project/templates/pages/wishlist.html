@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block style %}
-
+<link rel="stylesheet" href="{% static 'styles/MyCart.css' %}"/>
 {% endblock style %}
 
 {% block title %}
@@ -10,12 +10,62 @@ Chapterfly - Wishlist
 {% endblock title %}
 
 {% block content %}
-<h1>Your Wishlist</h1>
-<ul>
-    {% for item in wishlist_items %}
-    <li>{{ item.name }}</li>
-    {% empty %}
-    <li>Your wishlist is empty.</li>
-    {% endfor %}
-</ul>
+<br>
+<br>
+<h2 class="title main-title">Your Wishlist</h2>
+<div class="table-responsive form-group" id="cart_cont">
+    {% comment %}Wishlist items will be dynamically added here {% endcomment %}
+    {% if wishlist_items %}
+        {% for item in wishlist_items %}
+        <div class = 'cart_item row mb-4 d-flex justify-content-between align-items-center' id="cart_item{{item.id}}">
+            <div class="col-md-2 col-lg-2 col-xl-2">
+                <a href="{% url 'details' item.id %}">
+                    <img src="{% if item.img %}{{item.img.url}}{% else %} https://placehold.co/200x300 {% endif %}" class="img-fluid rounded-3 cart_img" alt="{item.name}" style="width: 65px">
+                </a>
+            </div>
+            <div class="col-md-3 col-lg-3 col-xl-3">
+                <a href="{% url 'view' %}">
+                    <h6 class="text-muted cart_category">{{item.category}}</h6>
+                </a>
+                <a href="{% url 'details' item.id %}">
+                    <h6 class="text-black mb-0 cart_name">{{item.name}}</h6>
+                </a>
+            </div>
+            <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                <h6 class='mb-0'>
+                    ${{item.price}}
+                </h6>
+            </div>
+            <div class = 'col-md-1 col-lg-1 col-xl-1 text-end'>
+                <button type="button" class="btn btn-danger btn-sm remove-from-wishlist"
+                        data-id="{{ item.id }}">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </div>
+        </div>
+        {% if not forloop.last %}
+            <hr>
+        {% endif %}
+        {% endfor %}
+    {% else %}
+        <p class="empty">Your wishlist is empty!</p>
+    {% endif %}
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).on('click', '.remove-from-wishlist', function() {
+        var itemId = $(this).data('id');
+        $.ajax({
+            type: 'POST',
+            url: '{% url "remove_from_wishlist" %}',
+            data: {
+                'item_id': itemId,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function(response) {
+                $('#cart_cont').load(location.href + ' #cart_cont');
+            }
+        });
+    });
+</script>
 {% endblock %}

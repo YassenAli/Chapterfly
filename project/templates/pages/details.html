@@ -12,6 +12,14 @@
   .loved {
       color: red;
   }
+  .message-container {
+    display: none; /* Hidden by default */
+     /* Optional shadow for depth */
+}
+
+.message-container .show {
+    display: block; /* Show the container when needed */
+}
 </style>
 {% endblock style %}
 
@@ -20,6 +28,16 @@ Chapterfly - {{book.name}}
 {% endblock title %}
 
 {% block content %}
+<div id="message-container" style="margin: 20px auto;
+    padding: 15px;
+    max-width: 600px;
+    background-color: #EFFAFC;
+    border: 1px solid #d1e7f1;
+    border-radius: 5px;
+    color: #333;
+    text-align: center;
+    font-size: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);"></div>
     <div class="book">
       <div class="logo"><i class="fa-solid fa-book-open icon"></i> Chapterfly</a></div>
       <h2><span id="name">{{book.name}}</span></h2>
@@ -29,9 +47,12 @@ Chapterfly - {{book.name}}
       <p><span class="label">Availability</span><span id="available">{{book.status}}</span></p>
       <p><span class="desc" id="description">{{book.description}}</span></p>
     {% if book.status == 'available' %}
-    <button type="button" class="addToCart-btn" title="Add to cart" id="add-to-cart-button" onClick="addToCart({{book.id}}, '{{book.name}}', {{book.price}}, {% if book.img %}'{{book.img.url}}'{% else %}'https://placehold.co/200x300'{% endif %}, '{{book.category}}')">
-      <i class="fa-solid fa-cart-shopping"></i>
-  </button>
+      <form id="add-to-cart-form" method="post">
+          {% csrf_token %}
+          <button type="button" data-id="{{ book.id }}" id="add-to-cart-button" class="addToCart-btn" title="Add to cart"> 
+            <i class="fa-solid fa-cart-shopping"></i>
+          </button>
+      </form>
     {% endif %}
 
     <form id="love-form" method="post">
@@ -49,9 +70,10 @@ Chapterfly - {{book.name}}
     </form>
 
     <a href="{% url 'view' %}" class="back" id="back-btn">Back to Books</a>
-    
-    <script src="{% static 'javascript/cart.js' %}"></script>
-    <script >
+  </div>
+   
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script >
       function getCookie(name) {
         var cookieValue = null;
         if (document.cookie && document.cookie !== '') {
@@ -66,7 +88,8 @@ Chapterfly - {{book.name}}
         }
         return cookieValue;
     }
-    
+    const messageContainer = document.getElementById('message-container');
+
     const loveButton = document.getElementById('love-button');
     loveButton.addEventListener('click', (event) => {
       event.preventDefault();
@@ -78,10 +101,10 @@ Chapterfly - {{book.name}}
             var response = JSON.parse(this.responseText);
             if (response.status === 'success') {
                 loveButton.innerHTML = 'Loved <i class="fa-solid fa-heart loved"></i>';
-                alert('Added to your loved books');
+                messageContainer.innerHTML = '<p>Added to your loved books</p>';
             } else if (response.status === 'already_in_wishlist') {
                 loveButton.innerHTML = 'Loved <i class="fa-solid fa-heart loved"></i>';
-                alert('This book is already in your loved books');
+                messageContainer.innerHTML = '<p>This book is already in your loved books</p>';
             }
         }
     };
@@ -90,6 +113,26 @@ Chapterfly - {{book.name}}
       xhttp.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
       xhttp.send("book-id=" + bookId);
   })
-    </script>
-    </div>
+  $(document).on('click', '#add-to-cart-button', function(e){
+    e.preventDefault();
+
+    var bookId = $(this).data('id');
+    var cartURL = `/add_to_cart/${bookId}/`;
+    
+    $.ajax({
+        type: 'POST',
+        url: cartURL,
+        data: {
+            'book_id': bookId,
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+        },
+        success: function(response){
+          messageContainer.innerHTML = `<p>${response.message}</p>`;
+        },
+        error: function(response){
+          messageContainer.innerHTML = '<p>An error occurred. Please try again.</p>';
+        }
+    });
+});
+</script>
 {% endblock content %}

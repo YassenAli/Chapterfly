@@ -89,6 +89,17 @@ def remove_from_cart(request):
     else:
         return JsonResponse({'error': 'Invalid request.'}, status=400)
     
+def remove_from_wishlist(request):
+    if request.method == 'POST' and 'item_id' in request.POST:
+        user_id = request.session.get('user_id')
+        signup_user = Signup.objects.get(id=user_id)
+        book_id = request.POST['item_id']
+        book = Book.objects.get(id=book_id)
+        signup_user.wishlist.remove(book)
+        return JsonResponse({'message': 'Book removed from Wishlist.'})
+    else:
+        return JsonResponse({'error': 'Invalid request.'}, status=400)
+    
 def main(request):
     isLogged = request.session.get('isLogged')
     is_admin = request.session.get('is_admin')
@@ -151,7 +162,15 @@ def add_to_cart(request, book_id):
             signup_user = Signup.objects.get(id=request.session['user_id'])
             if book not in signup_user.cart.all():
                 signup_user.cart.add(book)
-    return redirect('cart')
+                message = book.name + ' added to cart.'
+            else:
+                message = book.name + ' is already in the cart.'
+        else:
+            message = 'User is not logged in.'
+        return JsonResponse({'message': message})
+    else:
+        return JsonResponse({'message': 'Invalid request.'})
+    # return redirect(request.META.get('HTTP_REFERER', 'view'))
 
 def add_love(request):
     if request.method == 'POST':
@@ -185,8 +204,6 @@ def wishlist(request):
     
     user = Signup.objects.get(username=user_name)
     wishlist_items = user.wishlist.all()
-
-    print(f"Wishlist items: {wishlist_items}")
 
     context = {
         'wishlist_items': wishlist_items,
