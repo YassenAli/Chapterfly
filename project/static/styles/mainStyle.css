@@ -331,7 +331,7 @@ ul {
 .main-cta .container .primary-button {
   border: 1px solid white;
   border-radius: 15px;
-  padding: 30px;
+  padding: 5px 30px;
   transition: var(--main-transition-duration);
   background-color: var(--bgcolor);
   color: var(--primary);
@@ -525,10 +525,65 @@ ul {
   font-weight: bold;
   color: var(--primary);
 }
+/* End secondary CTA */
+/* ****************************************************** */
+/* Start Footer */
+/* footer {
+  background-color: #31363F;
+  color: white;
+  padding-bottom: 100px;
+}
+footer .container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(50%, 1fr));
+  border-bottom: 1px solid white;
+}
+footer .container .box {
+  text-align: center;
+  color: var(--accent1);
+  padding: 20px;
+}
+footer .container .box h3 {
+  font-size: 25px;
+}
+footer .container .box .social {
+  display: flex;
+  justify-content: space-evenly;
+  font-size: 30px;
+}
+footer .container .box .social li{
+  border: 2px solid;
+  border-radius: 50%;
+  width: 60px;
+  color: white;
+}
+footer .container .box .links {
+  padding: 40px;
+  font-size: 20px;
+}
+footer .container .box .links li {
+  color: white;
+  margin: 10px;
+}
+footer .container .box .links li a{
+  color: white;
+}
+footer .copyright {
+  margin: 20px;
+  text-align: center;
+}
+footer .copyright a {
+  color: var(--accent1);
+  margin-right: 20px;
+  font-weight: bold;
+}
+footer .copyright a i {
+  margin-right: 10px;
+} */
 footer {
   background-color: var(--bgcolor);
   padding: 20px;
-  color: var(--primary);
+  color: var(--primary)
 }
 footer .boxes {
   display: flex;
@@ -536,7 +591,7 @@ footer .boxes {
 }
 footer .boxes .box {
   width: 25%;
-  text-align: center;
+  text-align:center;
   padding: 20px;
 }
 .boxes .social img {
@@ -547,6 +602,6 @@ footer .bottom-line {
   display: flex;
   justify-content: space-between;
   font-size: 16px;
-  border-top: 1px solid var(--primary);
+  border-top: 1px solid var(--primary)
 }
 /* End Footer */

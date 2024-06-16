@@ -1,33 +1,50 @@
-{% extends 'base.html' %}
-
 {% load static %}
 
-{% block style %}
-<link rel="stylesheet" href="{% static 'styles/details.css' %}" />
-<style>
-  .fa-heart {
-      font-size: 24px;
-      color: #ccc;
-  }
-  .loved {
-      color: red;
-  }
-  .message-container {
-    display: none; /* Hidden by default */
-     /* Optional shadow for depth */
-}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="">
+    <meta property="og:url" content="#">
+    <meta property="og:description" content="Explore our online library.">
+    <meta property="og:locale" content="en-US">
+    <meta property="og:site_name" content="Chapterfly">
+    <!-- Google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap" rel="stylesheet"/>
 
-.message-container .show {
-    display: block; /* Show the container when needed */
-}
-</style>
-{% endblock style %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="{% static 'styles/mainStyle.css' %}" />
+    <link rel="stylesheet" href="{% static 'styles/all.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'styles/details.css' %}" />
+    <style>
+      .fa-heart {
+          font-size: 24px;
+          color: #ccc;
+      }
+      .loved {
+          color: red;
+      }
+      .message-container {
+        display: none; /* Hidden by default */
+        /* Optional shadow for depth */
+    }
 
-{% block title %}
-Chapterfly - {{book.name}}
-{% endblock title %}
+    .message-container .show {
+        display: block; /* Show the container when needed */
+    }
+    </style>  
+    <title>
+      Chapterfly - {{book.name}}
+    </title>
+  </head>
+  <body>
 
-{% block content %}
 <div id="message-container" style="margin: 20px auto;
     padding: 15px;
     max-width: 600px;
@@ -135,4 +152,5 @@ Chapterfly - {{book.name}}
     });
 });
 </script>
-{% endblock content %}
+</body>
+</html>

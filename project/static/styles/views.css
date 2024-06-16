@@ -1,13 +1,11 @@
 :root {
   --main-transition-duration: 0.3s;
-
   --primary: #333a73;
   --secondary: #378ce7;
   --accent1: #67c6e3;
   --accent2: #f9f2e7;
   --accent3: #f08080;
   --bgcolor: #effafc;
-
   --main-box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
 }
 * {

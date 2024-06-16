@@ -35,6 +35,7 @@ Chapterfly - View
             {% endfor %}
         </ul>
 
+        <div id="message-container"></div>
         </div>
         {%if not is_admin%}
         <div id="user" class="hidden">        
@@ -45,7 +46,7 @@ Chapterfly - View
                     {% for book in books %}
                         <div class="book box bookhide book{{book.category.id}}">
                             {% if book.img %}
-                                <img src="{{book.img}}" alt="Book Image" class="book-img" sytle="width: 600px"/>
+                                <img src="{{book.img.url}}" alt="Book Image" class="book-img" sytle="width: 600px"/>
 
                             {% else %}
                             <img src="https://placehold.co/200x300" alt="Book Image" class="book-img" sytle="width: 600px"/>
@@ -139,6 +140,8 @@ Chapterfly - View
     {% comment %} Scripts {% endcomment %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
+
+        {% comment %} Show books by category {% endcomment %}
         $(document).ready(function() {
             $('ul.nav').on('click', 'li.nav-item', function() {
                 var categoryId = $(this).attr('class').match(/cat(\d+)/)[1];
@@ -152,6 +155,8 @@ Chapterfly - View
                 $(".book{{book.category.id}}").show();
             });
         {% endfor %}*/
+        
+        {% comment %} Search {% endcomment %}
         function showResults(str) {
                 if (str.length === 0) {
                     // document.getElementById("books").innerHTML = books.innerHTML;
@@ -177,6 +182,7 @@ Chapterfly - View
         xhttp.send();
     }
 
+    {% comment %} Add to cart button {% endcomment %}
     $(document).on('click', '.addToCart-btn', function(e){
         e.preventDefault();
 
@@ -198,7 +204,7 @@ Chapterfly - View
             }
         });
     });
-    </script>        
+    </script>
 {% endblock content %}
 {% block extra_scripts %}
 {% comment %}

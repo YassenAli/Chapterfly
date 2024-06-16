@@ -15,10 +15,10 @@ class Checkout(models.Model):
         ('payPal', 'payPal')
     ]
     cardholder_name = models.CharField(max_length=255)
-    card_number = models.CharField(max_length=19)
+    card_number = models.PositiveBigIntegerField()
     card_type = models.CharField(max_length=10, choices=CARD_TYPE_CHOICES)
     expiration_date = models.DateField()
-    cvv = models.CharField(max_length=3)
+    cvv = models.SmallIntegerField()
 
     def __str__(self):
         return self.cardholder_name
