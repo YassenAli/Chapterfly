@@ -67,12 +67,25 @@ class SignupForm(forms.ModelForm):
             'isAdmin': forms.CheckboxInput(),
 
         }
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if Signup.objects.filter(username=username).exists():
+            raise forms.ValidationError("This username is already taken.")
+        return username
+    
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if Signup.objects.filter(email=email).exists():
+            raise forms.ValidationError("This email is already registered.")
+        return email
+
     def clean_confirmPassword(self):
         password = self.cleaned_data.get('password')
         confirmPassword = self.cleaned_data.get('confirmPassword')
         if password and confirmPassword and password != confirmPassword:
             raise forms.ValidationError("Passwords do not match")
-        return confirmPassword    
+        return confirmPassword      
 
 class loginForm(forms.Form):
     usernameLogin = forms.CharField(
