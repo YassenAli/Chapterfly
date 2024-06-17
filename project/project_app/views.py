@@ -250,14 +250,16 @@ def LoginSignup(request):
     if request.method == 'POST':
         if 'signup' in request.POST:
             form = SignupForm(request.POST)
-            login_form = loginForm()
+            login_form = loginForm() 
             if form.is_valid():
                 form.save()
-                messages.success(request, 'Account created successfully. Please log in.')
-                return redirect('LoginSignup')
+                return JsonResponse({'success': True})  
+            else:
+                errors = form.errors.get_json_data()  
+                return JsonResponse({'errors': errors})
+                
         else:
-            request.session['isLogged'] = False
-            form = SignupForm()
+            form = SignupForm()  
             login_form = loginForm(request.POST)
             if login_form.is_valid():
                 username = login_form.cleaned_data['usernameLogin']
@@ -266,7 +268,6 @@ def LoginSignup(request):
                 try:
                     signup_user = Signup.objects.get(username=username)
                     if signup_user.password == password: 
-
                         request.session['user_id'] = signup_user.id
                         request.session['username'] = signup_user.username
                         request.session['is_admin'] = signup_user.isAdmin
@@ -278,11 +279,18 @@ def LoginSignup(request):
                     message = 'Invalid username or password'
             else:
                 message = 'Form is not valid'
-            return render(request, 'pages/LoginSignup.html', {'SignupForm': form, 'loginForm': login_form, 'message': message })
+            return render(request, 'pages/LoginSignup.html', {
+                'SignupForm': form, 
+                'loginForm': login_form, 
+                'message': message 
+            })
     else:
         form = SignupForm()
         login_form = loginForm()
-    return render(request, 'pages/LoginSignup.html', {'SignupForm': form, 'loginForm': login_form})
+    return render(request, 'pages/LoginSignup.html', {
+        'SignupForm': form, 
+        'loginForm': login_form
+    })
 
 # def home(request):
 #     return render(request, "pages/main.html", {})
