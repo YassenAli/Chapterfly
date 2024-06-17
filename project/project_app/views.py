@@ -253,13 +253,15 @@ def LoginSignup(request):
             login_form = loginForm() 
             if form.is_valid():
                 form.save()
-                return JsonResponse({'success': True})  
+                if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                    return JsonResponse({'success': True})  # Respond with success for AJAX
             else:
-                errors = form.errors.get_json_data()  
-                return JsonResponse({'errors': errors})
+                if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                    errors = form.errors.get_json_data()  # Serialize form errors as JSON
+                    return JsonResponse({'errors': errors})
                 
         else:
-            form = SignupForm()  
+            form = SignupForm()  # Pass an empty signup form for login POST request
             login_form = loginForm(request.POST)
             if login_form.is_valid():
                 username = login_form.cleaned_data['usernameLogin']
@@ -291,7 +293,7 @@ def LoginSignup(request):
         'SignupForm': form, 
         'loginForm': login_form
     })
-
+    
 # def home(request):
 #     return render(request, "pages/main.html", {})
 
