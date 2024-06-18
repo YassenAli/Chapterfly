@@ -31,30 +31,62 @@
           color: red;
       }
       .message-container {
-        display: none; /* Hidden by default */
-        /* Optional shadow for depth */
-    }
+        display: none;
+      }
 
-    .message-container .show {
+    .message-container.show {
         display: block; /* Show the container when needed */
+    }
+    .message-container{
+      width: 350px;
+      background-color: white;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      z-index: 10;
+      transform: translate(-50%,-50%);
+      text-align: center;
+      padding: 0 30px 20px;
+      border-radius: 7px;
+      letter-spacing: 1px;
+    }
+    .popup_img{
+      width: 100px;
+      margin-top:-50px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0 , 0.2);
+      border-radius: 50%;
+    }
+    .popup_btn{
+      width: 100%;
+      background-color: var(--secondary);
+      color: white;
+      margin-top: 20px;
+      border: 0px;
+      height: 35px;
+      font-size: 18px;
+      letter-spacing: 1.5px;
+      text-align: center;
+      border-radius: 3px;
+    }
+    .container_popup_msg{
+      color: #767676;
     }
     </style>  
     <title>
       Chapterfly - {{book.name}}
     </title>
   </head>
-  <body>
+  <body> 
 
-<div id="message-container" style="margin: 20px auto;
-    padding: 15px;
-    max-width: 600px;
-    background-color: #EFFAFC;
-    border: 1px solid #d1e7f1;
-    border-radius: 5px;
-    color: #333;
-    text-align: center;
-    font-size: 20px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);"></div>
+<div id="message-container" class="message-container">
+<img class="popup_img" src="{% static 'images/popup/CorrectMark.png' %}">
+<h2 id="popup_statue">Thank You!</h2>
+<div class="container_popup_msg" id="container_popup_msg">
+</div>
+<button class="popup_btn" id="popup_btn">OK</button>
+</div><!--message-container-->
+    
+
     <div class="book">
       <div class="logo"><i class="fa-solid fa-book-open icon"></i> Chapterfly</a></div>
       <h2><span id="name">{{book.name}}</span></h2>
@@ -105,11 +137,17 @@
         }
         return cookieValue;
     }
+
+
     const messageContainer = document.getElementById('message-container');
+    const container_popup_msg = document.getElementById('container_popup_msg');
+    const popup_statue =document.getElementById('popup_statue');
+    const popup_btn = document.getElementById('popup_btn');
 
     const loveButton = document.getElementById('love-button');
     loveButton.addEventListener('click', (event) => {
       event.preventDefault();
+      messageContainer.classList.add('show');
       var bookId = document.querySelector('#love-form input[name="book-id"]').value;
   
       var xhttp = new XMLHttpRequest();
@@ -117,11 +155,11 @@
         if (this.readyState === 4 && this.status === 200) {
             var response = JSON.parse(this.responseText);
             if (response.status === 'success') {
-                loveButton.innerHTML = 'Loved <i class="fa-solid fa-heart loved"></i>';
-                messageContainer.innerHTML = '<p>Added to your loved books</p>';
+                loveButton.innerHTML = `Loved <i class="fa-solid fa-heart loved"></i>`;
+                container_popup_msg.innerHTML = `<p>Added to your loved books</p>`;
             } else if (response.status === 'already_in_wishlist') {
-                loveButton.innerHTML = 'Loved <i class="fa-solid fa-heart loved"></i>';
-                messageContainer.innerHTML = '<p>This book is already in your loved books</p>';
+                loveButton.innerHTML = `Loved <i class="fa-solid fa-heart loved"></i>`;
+                container_popup_msg.innerHTML = `<p>This book is already in your loved books</p>`;
             }
         }
     };
@@ -132,6 +170,7 @@
   })
   $(document).on('click', '#add-to-cart-button', function(e){
     e.preventDefault();
+    messageContainer.classList.add('show');
 
     var bookId = $(this).data('id');
     var cartURL = `/add_to_cart/${bookId}/`;
@@ -144,13 +183,21 @@
             'csrfmiddlewaretoken': '{{ csrf_token }}'
         },
         success: function(response){
-          messageContainer.innerHTML = `<p>${response.message}</p>`;
+          
+          container_popup_msg.innerHTML = `<p>${response.message}</p>`;
+
         },
         error: function(response){
-          messageContainer.innerHTML = '<p>An error occurred. Please try again.</p>';
+          container_popup_msg.innerHTML = '<p>An error occurred. Please try again.</p>';
+          popup_statue.textContent = 'Error'
         }
     });
 });
+
+popup_btn.onclick = function(){
+  messageContainer.classList.remove('show');
+}
+
 </script>
 </body>
 </html>
