@@ -4,6 +4,39 @@
 
 {% block style %}
 <link rel="stylesheet" href="{% static 'styles/LoginSignupStyle.css' %}"/>
+
+<style>
+    /*      error style          */
+.form_input_signup {
+  position: relative;
+  width: 100%;
+}
+.form_input_signup input {
+
+    margin: 8px 0;
+    padding: 11px 5px;
+
+}
+.form_input_signup.error input {
+  border-bottom: 1px solid red;
+  border-left: 1px solid red;
+  border-right: 1px solid red;
+  background-color: white;
+}
+.form_input_signup.error .error-message {
+  color: red;
+  font-size: small;
+  position: absolute;
+  bottom: calc(50% + 8px);
+  left: 10px;
+  /* display: none; */
+  width: auto;
+}
+.form_input_signup.error .error-message {
+  display: block;
+}
+</style>
+
 {% endblock %}
 
 {% block title %}
@@ -14,21 +47,44 @@ Login / Signup
 <div class="login_signup_section">
   <div class="LScontainer" id="LScontainer">
       <div class="signup">
-          <form method="POST">
+          <form method="POST" id="signupForm">
             {% csrf_token %}
               <h1 id="signuph1">Create Account</h1>
               <span>Enter your information to complete</span>
               <span>registeration</span>
-              <div class="form_inputs">
+              <!-- <div class="form_inputs">
                 
                   {{ SignupForm }}
 
-              </div><!--form inputs-->
-              <button type="submit" id="signupinform" name="signup">Sign Up</button type="submit">
+              </div>form inputs -->
+              <div class="form_input_signup{% if SignupForm.username.errors %} error{% endif %}">
+                  {{ SignupForm.username }}
+                  {% for error in SignupForm.username.errors %}
+                  <div class="error-message">{{ error }}</div>
+                  {% endfor %}
+            </div>
+            <div class="form_input_signup{% if SignupForm.email.errors %} error{% endif %}">
+                {{ SignupForm.email }}
+                {% for error in SignupForm.email.errors %}
+                    <div class="error-message">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <div class="form_input_signup">
+                {{ SignupForm.password }}
+            </div>
+            <div class="form_input_signup{% if SignupForm.confirmPassword.errors %} error{% endif %}">
+                {{ SignupForm.confirmPassword }}
+                {% for error in SignupForm.confirmPassword.errors %}
+                    <div class="error-message">{{ error }}</div>
+                {% endfor %}
+            </div>
+            <div class="form_input_signup">
+                {{ SignupForm.isAdmin }}
+                {{ SignupForm.isAdmin.label }}
+            </div>
+              <button type="submit" id="signupinform" name="signup">Sign Up</button>
           </form>
-            {% if message %}
-            <div class="error-message">{{ message }}</div>
-            {% endif %}
+            
       
       </div><!-- end signup-->
 
@@ -70,8 +126,29 @@ Login / Signup
 
   </div><!--container-->
 </div><!--end login signup section-->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{% static 'javascript/LoginSignupJS.js' %}"></script>  {% comment %} this is for toggle {% endcomment %}
-<script src="{% static 'javascript/adminORuser.js' %}"></script>
+
+
+
+
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    var inputs = document.querySelectorAll('.form_input_signup input');
+    inputs.forEach(function(input) {
+        input.addEventListener('input', function() {
+            var formGroup = this.closest('.form_input_signup');
+            formGroup.classList.remove('error');
+            var errorMessage = formGroup.querySelector('.error-message');
+            if (errorMessage) {
+                errorMessage.style.display = 'none';
+            }
+        });
+    });
+});
+
+</script>
 
 {% endblock content %}
-
