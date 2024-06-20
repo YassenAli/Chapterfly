@@ -11,14 +11,14 @@
     <meta property="og:description" content="Explore our online library.">
     <meta property="og:locale" content="en-US">
     <meta property="og:site_name" content="Chapterfly">
-    <!-- Google fonts -->
+     {% comment %} Google fonts  {% endcomment %}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap" rel="stylesheet"/>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
     
-    <!-- Style sheets -->
+    {% comment %} Style sheets  {% endcomment %}
     <link rel="stylesheet" href="{% static 'styles/mainStyle.css' %}" />
     <link rel="stylesheet" href="{% static 'styles/all.min.css' %}" />
     <link rel="stylesheet" href="{% static 'styles/details.css' %}" />
@@ -35,12 +35,12 @@
       }
 
     .message-container.show {
-        display: block; /* Show the container when needed */
+        display: block; {% comment %} /* Show the container when needed */ {% endcomment %}
     }
     .message-container{
       width: 350px;
       background-color: white;
-      position: absolute;
+      position: fixed;
       top: 50%;
       left: 50%;
       z-index: 10;
@@ -71,6 +71,10 @@
     .container_popup_msg{
       color: #767676;
     }
+
+    .message-container h2{
+      color: var(--secondary);
+    }
     </style>  
     <title>
       Chapterfly - {{book.name}}
@@ -84,7 +88,7 @@
 <div class="container_popup_msg" id="container_popup_msg">
 </div>
 <button class="popup_btn" id="popup_btn">OK</button>
-</div><!--message-container-->
+</div> {% comment %} message-container {% endcomment %}
     
 
     <div class="book">
@@ -189,7 +193,7 @@
         },
         error: function(response){
           container_popup_msg.innerHTML = '<p>An error occurred. Please try again.</p>';
-          popup_statue.textContent = 'Error'
+          popup_statue.textContent = 'Error';
         }
     });
 });
@@ -197,7 +201,6 @@
 popup_btn.onclick = function(){
   messageContainer.classList.remove('show');
 }
-
 </script>
 </body>
 </html>

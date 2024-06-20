@@ -13,6 +13,7 @@
 
 {% block content %}
     <br />
+    <br />
     {% comment %} Add new books form {% endcomment %}
     <h2 class="main-title">Add New Book</h2>
     <form class="AddingBook" method="POST" enctype="multipart/form-data">
@@ -45,6 +46,7 @@
       </button>
     </form>
     <br />
+    <br />
     <h2 class="main-title">Add Category</h2>
     <form class="AddingBook" method="POST">
       {% csrf_token %}
@@ -53,4 +55,7 @@
       <button type="submit" class="AddingBookBtn" name="add_category">
         Save</button>
     </form>
+    <br />
+    <br />
+
 {% endblock content %}
