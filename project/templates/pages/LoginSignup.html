@@ -3,152 +3,248 @@
 {% load static %}
 
 {% block style %}
-<link rel="stylesheet" href="{% static 'styles/LoginSignupStyle.css' %}"/>
+<link rel="stylesheet" href="{% static 'styles/LoginSignupStyle.css' %}" />
 
 <style>
-    /*      error style          */
-.form_input_signup {
-  position: relative;
-  width: 100%;
-}
-.form_input_signup input {
-
+  /*      error style          */
+  .form_input_signup {
+    position: relative;
+    width: 100%;
+  }
+  .form_input_signup input {
     margin: 8px 0;
     padding: 11px 5px;
-
-}
-.form_input_signup.error input {
-  border-bottom: 1px solid red;
-  border-left: 1px solid red;
-  border-right: 1px solid red;
-  background-color: white;
-}
-.form_input_signup.error .error-message {
-  color: red;
-  font-size: small;
-  position: absolute;
-  bottom: calc(50% + 8px);
-  left: 10px;
-  /* display: none; */
-  width: auto;
-}
-.form_input_signup.error .error-message {
-  display: block;
-}
+  }
+  .form_input_signup.error input {
+    border-bottom: 1px solid red;
+    border-left: 1px solid red;
+    border-right: 1px solid red;
+    background-color: white;
+  }
+  .form_input_signup.error .error-message {
+    color: red;
+    font-size: small;
+    position: absolute;
+    bottom: calc(50% + 8px);
+    left: 10px;
+    /* display: none; */
+    width: auto;
+  }
+  .form_input_signup.error .error-message {
+    display: block;
+  }
 </style>
 
 {% endblock %}
 
-{% block title %}
-Login / Signup
-{% endblock %}
+{% block title %} Login / Signup {% endblock %}
 
-{% block content %}
+{% block content%}
 <div class="login_signup_section">
   <div class="LScontainer" id="LScontainer">
-      <div class="signup">
-          <form method="POST" id="signupForm">
-            {% csrf_token %}
-              <h1 id="signuph1">Create Account</h1>
-              <span>Enter your information to complete</span>
-              <span>registeration</span>
-              <!-- <div class="form_inputs">
+    <div class="signup">
+      <form method="POST" id="signupForm">
+        {% csrf_token %}
+        <h1 id="signuph1">Create Account</h1>
+        <span>Enter your information to complete</span>
+        <span>registeration</span>
+        <!-- <div class="form_inputs">
                 
                   {{ SignupForm }}
 
               </div>form inputs -->
-              <div class="form_input_signup{% if SignupForm.username.errors %} error{% endif %}">
-                  {{ SignupForm.username }}
-                  {% for error in SignupForm.username.errors %}
-                  <div class="error-message">{{ error }}</div>
-                  {% endfor %}
-            </div>
-            <div class="form_input_signup{% if SignupForm.email.errors %} error{% endif %}">
-                {{ SignupForm.email }}
-                {% for error in SignupForm.email.errors %}
-                    <div class="error-message">{{ error }}</div>
-                {% endfor %}
-            </div>
-            <div class="form_input_signup">
-                {{ SignupForm.password }}
-            </div>
-            <div class="form_input_signup{% if SignupForm.confirmPassword.errors %} error{% endif %}">
-                {{ SignupForm.confirmPassword }}
-                {% for error in SignupForm.confirmPassword.errors %}
-                    <div class="error-message">{{ error }}</div>
-                {% endfor %}
-            </div>
-            <div class="form_input_signup">
-                {{ SignupForm.isAdmin }}
-                {{ SignupForm.isAdmin.label }}
-            </div>
-              <button type="submit" id="signupinform" name="signup">Sign Up</button>
-          </form>
-            
-      
-      </div><!-- end signup-->
+        <div
+          class="form_input_signup{% if SignupForm.username.errors %} error{% endif %}"
+        >
+          {{ SignupForm.username }} {% for error in SignupForm.username.errors%}
+          <div class="error-message">{{ error }}</div>
+          {% endfor %}
+        </div>
+        <div
+          class="form_input_signup{% if SignupForm.email.errors %} error{% endif %}"
+        >
+          {{ SignupForm.email }} {% for error in SignupForm.email.errors %}
+          <div class="error-message">{{ error }}</div>
+          {% endfor %}
+        </div>
+        <div class="form_input_signup">{{ SignupForm.password }}</div>
+        <div
+          class="form_input_signup{% if SignupForm.confirmPassword.errors %} error{% endif %}"
+        >
+          {{ SignupForm.confirmPassword }} {% for error in SignupForm.confirmPassword.errors %}
+          <div class="error-message">{{ error }}</div>
+          {% endfor %}
+        </div>
+        <div class="form_input_signup">
+          {{ SignupForm.isAdmin }} {{ SignupForm.isAdmin.label }}
+        </div>
+        <button type="submit" id="signupinform" name="signup">Sign Up</button>
+      </form>
+    </div>
+    <!-- end signup-->
 
-      <div class="login">
-          <form method="POST">
-            {% csrf_token %}
-              <h1>LogIn</h1>
-              <span class="login_desc">Enter UserName and Password</span>
-              <div class="form_inputs">
-                  <!-- <input type="text" placeholder="User Name">
+    <div class="login">
+      <form method="POST" id="loginForm">
+        {% csrf_token %}
+        <h1>LogIn</h1>
+        <span class="login_desc">Enter UserName and Password</span>
+        <div class="form_inputs">
+          <!-- <input type="text" placeholder="User Name">
                   <input type="password" placeholder="Password"> -->
-                  {{ loginForm }}
-              </div><!--form input-->
-              <button id="login_btn" type="submit" name="login">Log In</button>
-          </form>
-          {% if message %}
-            <div class="error-message" style="text-align: center; color: red;">{{ message }}</div>
-            {% endif %}
-            {% if ID %}
-                <div class="error-message" style="text-align: center; color: red;">{{ ID }}</div>
-            {% endif  %}
-      </div><!-- end login-->
+          {{ loginForm }}
+        </div>
+        <!--form input-->
+        <button id="login_btn" type="submit" name="login">Log In</button>
+      </form>
+      <div id="login-error" style="text-align: center; color: red"></div>
+      {% if ID %}
+      <div class="error-message" style="text-align: center; color: red">
+        {{ ID }}
+      </div>
+      {% endif %}
+    </div>
+    <!-- end login-->
 
-      <div class="circle-container">
-          <div class="circle">
-              <div class="circle_left">
-                  <h1>Already have account!</h1>
-                  <span>Enter your personal details to use</span>
-                  <span> all of site features</span>
-                  <button id="Login">Log In</button>
-              </div><!--circle left-->
-              <div class="circle_right">
-                  <h1>Welcome to Chapterfly!</h1>
-                  <span>Register with your personal details to make</span><span>an account in Chapterfly</span>
-                  <button id="register">Sign Up</button>
-              </div><!--circle right-->
-          </div><!--circle-->
-      </div><!--circle-container-->
-
-  </div><!--container-->
-</div><!--end login signup section-->
+    <div class="circle-container">
+      <div class="circle">
+        <div class="circle_left">
+          <h1>Already have account!</h1>
+          <span>Enter your personal details to use</span>
+          <span> all of site features</span>
+          <button id="Login">Log In</button>
+        </div>
+        <!--circle left-->
+        <div class="circle_right">
+          <h1>Welcome to Chapterfly!</h1>
+          <span>Register with your personal details to make</span
+          ><span>an account in Chapterfly</span>
+          <button id="register">Sign Up</button>
+        </div>
+        <!--circle right-->
+      </div>
+      <!--circle-->
+    </div>
+    <!--circle-container-->
+  </div>
+  <!--container-->
+</div>
+<!--end login signup section-->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="{% static 'javascript/LoginSignupJS.js' %}"></script>  {% comment %} this is for toggle {% endcomment %}
-
-
-
-
+<script src="{% static 'javascript/LoginSignupJS.js' %}"></script>
+{% comment %} this is for toggle {% endcomment %}
 
 <script>
-
-document.addEventListener('DOMContentLoaded', function() {
-    var inputs = document.querySelectorAll('.form_input_signup input');
-    inputs.forEach(function(input) {
-        input.addEventListener('input', function() {
-            var formGroup = this.closest('.form_input_signup');
-            formGroup.classList.remove('error');
-            var errorMessage = formGroup.querySelector('.error-message');
-            if (errorMessage) {
-                errorMessage.style.display = 'none';
-            }
-        });
+  document.addEventListener("DOMContentLoaded", function () {
+    var inputs = document.querySelectorAll(".form_input_signup input");
+    inputs.forEach(function (input) {
+      input.addEventListener("input", function () {
+        var formGroup = this.closest(".form_input_signup");
+        formGroup.classList.remove("error");
+        var errorMessage = formGroup.querySelector(".error-message");
+        if (errorMessage) {
+          errorMessage.style.display = "none";
+        }
+      });
     });
-});
+  });
 
+  $(document).ready(function () {
+    $("#signupForm").on("submit", function (event) {
+      event.preventDefault();
+      let formData = $(this).serialize();
+
+      $.ajax({
+        url: "{% url 'signup' %}",
+        type: "POST",
+        data: formData,
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          "X-CSRFToken": $('input[name="csrfmiddlewaretoken"]').val(),
+        },
+        success: function (response) {
+          if (response.success) {
+            if (response.redirect) {
+              window.location.href = "/view/LoginSignup/";
+            } else {
+              $("#signupForm").prepend(
+                '<div class="success-message">Account created successfully!</div>'
+              );
+              $("#signupForm")[0].reset();
+            }
+          } else {
+            if (response.errors) {
+              let errors = response.errors;
+              $(".form_input_signup.error").removeClass("error");
+              $(".error-message").remove();
+
+              $.each(errors, function (key, value) {
+                let field = $(`#id_${key}`);
+                field.parent().addClass("error");
+                field.after(
+                  `<div class="error-message">${value[0].message}</div>`
+                );
+              });
+            } else if (response.message) {
+              $("#signupForm").prepend(
+                `<div class="error-message">${response.message}</div>`
+              );
+            }
+          }
+        },
+        error: function (xhr, errmsg, err) {
+          console.log("An error occurred: " + errmsg);
+        },
+      });
+    });
+
+    $("#loginForm").on("submit", function (event) {
+      event.preventDefault();
+      let formData = $(this).serialize();
+
+      $.ajax({
+        url: "{% url 'login' %}",
+        type: "POST",
+        data: formData,
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          "X-CSRFToken": $('input[name="csrfmiddlewaretoken"]').val(),
+        },
+        success: function (response) {
+          if (response.success) {
+            if (response.redirect) {
+              window.location.href = response.redirect;
+            }
+          } else {
+            if (response.message) {
+              let message = response.message;
+              
+
+              const loginError = document.getElementById("login-error");
+              loginError.textContent = `${response.message}`;
+              if (loginError != "") {
+                loginError.style.display = "block";
+              }
+
+              var inputs = document.querySelectorAll(".login input");
+              inputs.forEach(function (input) {
+                input.addEventListener("input", function () {
+                  var formGroup = this.closest(".login");
+
+                  var errorMessage = formGroup.querySelector("#login-error");
+                  if (errorMessage) {
+                    errorMessage.style.display = "none";
+                  }
+                });
+              });
+            }
+          }
+        },
+        error: function (xhr, errmsg, err) {
+          console.log("An error occurred: " + errmsg);
+        },
+      });
+    });
+  });
 </script>
 
 {% endblock content %}

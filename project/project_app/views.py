@@ -246,53 +246,49 @@ def update_profile_photo_ajax(request):
 
 
 
-def LoginSignup(request):
-    if request.method == 'POST':
-        if 'signup' in request.POST:
-            form = SignupForm(request.POST)
-            login_form = loginForm() 
-            if form.is_valid():
-                form.save()
-                if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                    return JsonResponse({'success': True})  # Respond with success for AJAX
-            else:
-                if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                    errors = form.errors.get_json_data()  # Serialize form errors as JSON
-                    return JsonResponse({'errors': errors})
-                
+def signup(request):
+    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'success': True, 'redirect': True})
         else:
-            form = SignupForm()  # Pass an empty signup form for login POST request
-            login_form = loginForm(request.POST)
-            if login_form.is_valid():
-                username = login_form.cleaned_data['usernameLogin']
-                password = login_form.cleaned_data['passwordLogin']
-                
-                try:
-                    signup_user = Signup.objects.get(username=username)
-                    if signup_user.password == password: 
-                        request.session['user_id'] = signup_user.id
-                        request.session['username'] = signup_user.username
-                        request.session['is_admin'] = signup_user.isAdmin
-                        request.session['isLogged'] = True
-                        return redirect('view')
-                    else:
-                        message = 'Invalid username or password'
-                except Signup.DoesNotExist:
-                    message = 'Invalid username or password'
-            else:
-                message = 'Form is not valid'
-            return render(request, 'pages/LoginSignup.html', {
-                'SignupForm': form, 
-                'loginForm': login_form, 
-                'message': message 
-            })
+            errors = form.errors.get_json_data()
+            return JsonResponse({'success': False, 'errors': errors})
     else:
+        return JsonResponse({'success': False, 'message': 'Invalid request'})
+
+def login(request):
+    if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        login_form = loginForm(request.POST)
+        if login_form.is_valid():
+            username = login_form.cleaned_data['usernameLogin']
+            password = login_form.cleaned_data['passwordLogin']
+            try:
+                signup_user = Signup.objects.get(username=username)
+                if signup_user.password == password:
+                    request.session['user_id'] = signup_user.id
+                    request.session['username'] = signup_user.username
+                    request.session['is_admin'] = signup_user.isAdmin
+                    request.session['isLogged'] = True
+                    return JsonResponse({'success': True, 'redirect': '/view/'})
+                else:
+                    return JsonResponse({'success': False, 'message': 'Invalid username or password'})
+            except Signup.DoesNotExist:
+                return JsonResponse({'success': False, 'message': 'Invalid username or password'})
+        else:
+            pass
+    else:
+        return JsonResponse({'success': False, 'message': 'Invalid request'})
+
+def render_login_signup_page(request):
+    # if request.method == 'GET':
         form = SignupForm()
         login_form = loginForm()
-    return render(request, 'pages/LoginSignup.html', {
-        'SignupForm': form, 
-        'loginForm': login_form
-    })
+        return render(request, 'pages/LoginSignup.html', {
+            'SignupForm': form,
+            'loginForm': login_form
+        })
     
 # def home(request):
 #     return render(request, "pages/main.html", {})
