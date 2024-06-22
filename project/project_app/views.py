@@ -171,27 +171,25 @@ def add_to_cart(request, book_id):
     else:
         return JsonResponse({'message': 'Invalid request.'})
     # return redirect(request.META.get('HTTP_REFERER', 'view'))
-
-def add_love(request):
+    
+def add_love(request, book_id):
     if request.method == 'POST':
-        if not request.user.is_authenticated:
-            return redirect('LoginSignup')
-            # return JsonResponse({'status': 'login_required'})
-
-        book_id = request.POST.get('book-id')
-        try:
-            book = Book.objects.get(id=book_id)
-            signup_user = Signup.objects.get(id=request.session.get('user_id'))
-        except (Book.DoesNotExist, Signup.DoesNotExist):
-            return HttpResponseBadRequest('Book or user does not exist')
-
-        if book in signup_user.wishlist.all():
-            return JsonResponse({'status': 'already_in_wishlist'})
+        book = get_object_or_404(Book, id=book_id)
+        if 'user_id' in request.session:
+            signup_user = Signup.objects.get(id=request.session['user_id'])
+            if book not in signup_user.wishlist.all():
+                signup_user.wishlist.add(book)
+                message = book.name + ' is added to your loved books.'
+                status = 'success'
+            else:
+                message = book.name + ' is already in your loved books.'
+                status = 'already_in_wishlist'
         else:
-            signup_user.wishlist.add(book)
-            return JsonResponse({'status': 'success'})
-
-    return HttpResponseBadRequest()
+            message = 'User is not logged in.'
+            status = 'login_required'
+        return JsonResponse({'message': message, 'status': status})
+    else:
+        return JsonResponse({'message': 'Invalid request.'}, status=400)
 
 def wishlist(request):
     isLogged = request.session.get('isLogged')

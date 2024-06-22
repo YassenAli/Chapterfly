@@ -82,13 +82,13 @@
   </head>
   <body> 
 
-<div id="message-container" class="message-container">
-<img class="popup_img" src="{% static 'images/popup/CorrectMark.png' %}">
-<h2 id="popup_statue">Thank You!</h2>
-<div class="container_popup_msg" id="container_popup_msg">
-</div>
-<button class="popup_btn" id="popup_btn">OK</button>
-</div> {% comment %} message-container {% endcomment %}
+    <div id="message-container" class="message-container">
+      <img class="popup_img" src="{% static 'images/popup/CorrectMark.png' %}">
+      <h2 id="popup_statue">Thank You!</h2>
+      <div class="container_popup_msg" id="container_popup_msg">
+      </div>
+      <button class="popup_btn" id="popup_btn">OK</button>
+    </div>{% comment %} message-container {% endcomment %}
     
 
     <div class="book">
@@ -108,7 +108,7 @@
       </form>
     {% endif %}
 
-    <form id="love-form" method="post">
+    <form id="love-form" method="POST">
       {% csrf_token %}
       <input type="hidden" name="book-id" value="{{ book.id }}">
       <input type="hidden" name="add-to-wishlist" value="true">    
@@ -125,82 +125,98 @@
     <a href="{% url 'view' %}" class="back" id="back-btn">Back to Books</a>
   </div>
    
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script >
-      function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  function getCookie(name) {
+      var cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+          var cookies = document.cookie.split(';');
+          for (var i = 0; i < cookies.length; i++) {
+              var cookie = cookies[i].trim();
+              if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
+      }
+      return cookieValue;
+  }
 
+  const popupBtn = $('#popup_btn');
+  const messageContainer = $('#message-container');
+  const containerPopupMsg = $('#container_popup_msg');
+  const popupStatue = $('#popup_statue');
+  const loveButton = $('#love-button');
 
-    const messageContainer = document.getElementById('message-container');
-    const container_popup_msg = document.getElementById('container_popup_msg');
-    const popup_statue =document.getElementById('popup_statue');
-    const popup_btn = document.getElementById('popup_btn');
+  loveButton.on('click', function(e) {
+      e.preventDefault();
+      messageContainer.addClass('show');
+      var bookId = $('#love-form input[name="book-id"]').val();
+      var URL = `/add_love/${bookId}/`;
 
-    const loveButton = document.getElementById('love-button');
-    loveButton.addEventListener('click', (event) => {
-      event.preventDefault();
-      messageContainer.classList.add('show');
-      var bookId = document.querySelector('#love-form input[name="book-id"]').value;
-  
-      var xhttp = new XMLHttpRequest();
-      xhttp.onreadystatechange = function() {
-        if (this.readyState === 4 && this.status === 200) {
-            var response = JSON.parse(this.responseText);
-            if (response.status === 'success') {
-                loveButton.innerHTML = `Loved <i class="fa-solid fa-heart loved"></i>`;
-                container_popup_msg.innerHTML = `<p>Added to your loved books</p>`;
-            } else if (response.status === 'already_in_wishlist') {
-                loveButton.innerHTML = `Loved <i class="fa-solid fa-heart loved"></i>`;
-                container_popup_msg.innerHTML = `<p>This book is already in your loved books</p>`;
-            }
-        }
-    };
-      xhttp.open("POST", "{% url 'add_love' %}", true);
-      xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      xhttp.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-      xhttp.send("book-id=" + bookId);
-  })
-  $(document).on('click', '#add-to-cart-button', function(e){
-    e.preventDefault();
-    messageContainer.classList.add('show');
+      $.ajax({
+          type: 'POST',
+          url: URL,
+          data: {
+              'book-id': bookId,
+              'csrfmiddlewaretoken': getCookie('csrftoken')
+          },
+          success: function(response) {
+            containerPopupMsg.html(`<p>${response.message}</p>`);
+            if (response.status === 'success' || response.status === 'already_in_wishlist') {
+              loveButton.html('Loved <i class="fa-solid fa-heart loved"></i>');
+          }
+          },
+          error: function() {
+              containerPopupMsg.html('<p>Failed to process the request</p>');
+          }
+      });
+  });
 
-    var bookId = $(this).data('id');
-    var cartURL = `/add_to_cart/${bookId}/`;
-    
-    $.ajax({
-        type: 'POST',
-        url: cartURL,
-        data: {
-            'book_id': bookId,
-            'csrfmiddlewaretoken': '{{ csrf_token }}'
-        },
-        success: function(response){
-          
-          container_popup_msg.innerHTML = `<p>${response.message}</p>`;
+  $(document).on('click', '#add-to-cart-button', function(e) {
+      e.preventDefault();
+      messageContainer.addClass('show');
+      var bookId = $(this).data('id');
+      var cartURL = `/add_to_cart/${bookId}/`;
 
-        },
-        error: function(response){
-          container_popup_msg.innerHTML = '<p>An error occurred. Please try again.</p>';
-          popup_statue.textContent = 'Error';
-        }
-    });
-});
+      $.ajax({
+          type: 'POST',
+          url: cartURL,
+          data: {
+              'book_id': bookId,
+              'csrfmiddlewaretoken': getCookie('csrftoken')
+          },
+          success: function(response) {
+              containerPopupMsg.html(`<p>${response.message}</p>`);
+          },
+          error: function() {
+              containerPopupMsg.html('<p>An error occurred. Please try again.</p>');
+              popupStatue.text('Error');
+          }
+      });
+  });
 
-popup_btn.onclick = function(){
-  messageContainer.classList.remove('show');
-}
+  popupBtn.on('click', function() {
+      messageContainer.removeClass('show');
+  });
 </script>
 </body>
 </html>
+
+
+
+{% comment %} 
+
+success: function(response) {
+              if (response.status === 'success') {
+                  loveButton.html('Loved <i class="fa-solid fa-heart loved"></i>');
+                  containerPopupMsg.html('<p>Added to your loved books</p>');
+              } else if (response.status === 'already_in_wishlist') {
+                  loveButton.html('Loved <i class="fa-solid fa-heart loved"></i>');
+                  containerPopupMsg.html('<p>This book is already in your loved books</p>');
+              }
+          },
+          error: function() {
+              containerPopupMsg.html('<p>Failed to process the request</p>');
+          }
+{% endcomment %}
