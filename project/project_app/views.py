@@ -70,7 +70,7 @@ def cart(request):
     if request.method == 'POST':
         form = CheckoutForm(request.POST)
         if form.is_valid():
-            borrow_book(request, cart_book_ids)
+            borrow_books(request, cart_book_ids)
             return redirect('account')
         
     context = {
@@ -292,15 +292,12 @@ def render_login_signup_page(request):
             'SignupForm': form,
             'loginForm': login_form
         })
-    
-# def home(request):
-#     return render(request, "pages/main.html", {})
 
 
 def account(request):
     isLogged = request.session.get('isLogged')
     is_admin = request.session.get('is_admin')
-    if request.session.get('isLogged'):
+    if isLogged:
         username = request.session.get('username', 'default')
         user = Signup.objects.get(username=username)
         profile_picture_url = user.profilePicture.url if user.profilePicture else None
@@ -314,12 +311,15 @@ def account(request):
         else:
             profile_photo_form = ProfilePhotoForm(instance=user)
 
+        borrowed_books = user.borrowed_books.filter(status='borrowed')
+
         context = {
             'username': username,
             'profilePicture': profile_picture_url,
             'profilePhotoForm': profile_photo_form,
-            'isLogged':isLogged,
-            'is_admin':is_admin,
+            'isLogged': isLogged,
+            'is_admin': is_admin,
+            'borrowed_books': borrowed_books,
         }
         return render(request, 'pages/accountUser.html', context)
     else:
@@ -338,20 +338,6 @@ def navbarAdmin(request):
         'isLogged' : isLogged,
     }
     return render(request, 'parts/nav.html', context)
-    
-def borrow_book(request, book_ids):
-    for book_id in book_ids:
-        try:
-            book = Book.objects.get(id=book_id)
-        except Book.DoesNotExist:
-            return JsonResponse({'error': 'Book not found'}, status=404)
-        else:
-            if book.status == 'available':
-                book.status = 'borrowed'
-                book.save()
-        return JsonResponse({'message': 'Book successfully borrowed'})
-    else:
-        return JsonResponse({'error': 'Book is not available for borrowing'}, status=400)
 
 def status_details(request, book_id):
     if request.method == 'POST':
@@ -380,3 +366,21 @@ def status_views(request, book_id):
             book.save()
             return JsonResponse({'message': 'Status updated successfully'})
     return HttpResponseBadRequest('Invalid request')
+
+def borrow_books(request):
+    if request.method == 'POST':
+        username = request.session.get('username')
+        user = Signup.objects.get(username=username)
+        cart_books = user.cart.filter(status='available')
+
+        if not cart_books:
+            return JsonResponse({'error': 'No available books in the cart'}, status=400)
+
+        for book in cart_books:
+            book.status = 'borrowed'
+            book.save()
+            user.cart.remove(book)
+            user.borrowed_books.add(book)
+
+        return JsonResponse({'success': 'Books successfully borrowed'})
+    return JsonResponse({'error': 'Invalid request'}, status=400)
