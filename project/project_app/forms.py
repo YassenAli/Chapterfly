@@ -7,7 +7,7 @@ class CategoryForm(forms.ModelForm):
         model = Category
         fields = ['name']
         widgets = {
-            'name': forms.TextInput(),
+            'name': forms.TextInput(attrs={'placeholder': 'Category Name', 'class': 'form_field'})
         }
 
 
@@ -26,11 +26,13 @@ class BookForm(forms.ModelForm):
         ]
 
         widgets = {
-            'category': forms.Select(),
-            'status': forms.Select(),
-            'price': forms.NumberInput(),
-            'id': forms.NumberInput(),
-            'img': forms.FileInput(),
+            'name': forms.TextInput(attrs={'placeholder': 'Book Title', 'class': 'form_field'}),
+            'author': forms.TextInput(attrs={'placeholder': 'Author Name', 'class': 'form_field'}),
+            'category': forms.Select(attrs={'class': 'form_field'}),
+            'status': forms.Select(attrs={'class': 'form_field'}),
+            'price': forms.NumberInput(attrs={'placeholder': 'Price', 'class': 'form_field'}),
+            'img': forms.FileInput(attrs={'class': 'form_field'}),
+            'description': forms.Textarea(attrs={'class': 'form_field description', 'placeholder': 'Description...'}),
             # 'img': forms.FilePathField(),
         }
 
