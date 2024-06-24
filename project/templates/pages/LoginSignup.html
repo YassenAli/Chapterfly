@@ -33,6 +33,51 @@
   .form_input_signup.error .error-message {
     display: block;
   }
+  .message-container {
+      display: none;
+  }
+
+    .message-container.show {
+        display: block;
+    }
+    .message-container{
+      width: 350px;
+      background-color: white;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      z-index: 20;
+      transform: translate(-50%,-50%);
+      text-align: center;
+      padding: 0 30px 20px;
+      border-radius: 7px;
+      letter-spacing: 1px;
+    }
+    .popup_img{
+      width: 100px;
+      margin-top:-50px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0 , 0.2);
+      border-radius: 50%;
+    }
+    .popup_btn{
+      width: 100%;
+      background-color: var(--secondary);
+      color: white;
+      margin-top: 20px;
+      border: 0px;
+      height: 35px;
+      font-size: 18px;
+      letter-spacing: 1.5px;
+      text-align: center;
+      border-radius: 3px;
+    }
+    .container_popup_msg{
+      color: #767676;
+    }
+
+    .message-container h2{
+      color: var(--secondary);
+    }
 </style>
 
 {% endblock %}
@@ -40,6 +85,15 @@
 {% block title %} Login / Signup {% endblock %}
 
 {% block content%}
+<div id="message-container" class="message-container">
+  <img class="popup_img" src="{% static 'images/popup/CorrectMark.png' %}">
+  <h2 id="popup_statue">Thank You!</h2>
+  <div class="container_popup_msg" id="container_popup_msg">
+    Your account created successfully! You can login now to view our books.
+  </div>
+  <button class="popup_btn" id="popup_btn">OK</button>
+</div>{% comment %} message-container {% endcomment %}
+
 <div class="login_signup_section">
   <div class="LScontainer" id="LScontainer">
     <div class="signup">
@@ -134,6 +188,9 @@
 {% comment %} this is for toggle {% endcomment %}
 
 <script>
+  const popupBtn = $('#popup_btn');
+  const messageContainer = $('#message-container');
+
   document.addEventListener("DOMContentLoaded", function () {
     var inputs = document.querySelectorAll(".form_input_signup input");
     inputs.forEach(function (input) {
@@ -164,7 +221,11 @@
         success: function (response) {
           if (response.success) {
             if (response.redirect) {
+              messageContainer.addClass('show');
+              popupBtn.on('click', function() {
+              messageContainer.removeClass('show');
               window.location.href = "/view/LoginSignup/";
+              });
             } else {
               $("#signupForm").prepend(
                 '<div class="success-message">Account created successfully!</div>'
