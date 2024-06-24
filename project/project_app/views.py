@@ -31,23 +31,28 @@ def view(request):
     return render(request, 'pages/views.html', context)
 
 
-def add_book(request):
-    if request.method == 'POST':
-        if 'add_book' in request.POST:
-            add_book = BookForm(request.POST, request.FILES) # request.FILES  to save images
-            if add_book.is_valid():
-                add_book.save()
-
-        elif 'add_category' in request.POST:
-            add_category = CategoryForm(request.POST)
-            if add_category.is_valid():
-                add_category.save()
-        
+def render_add_book_page(request):
     context = {
         'form': BookForm(),
         'formCategory': CategoryForm(),
     }
     return render(request, 'pages/add_book.html', context)
+
+def add_book(request):
+    if request.method == 'POST':
+        add_book_form = BookForm(request.POST, request.FILES)
+        if add_book_form.is_valid():
+            add_book_form.save()
+            return JsonResponse({'message': 'Book added successfully'}, status=200)
+        return JsonResponse({'message': 'Error adding book'}, status=400)
+
+def add_category(request):
+    if request.method == 'POST':
+        add_category_form = CategoryForm(request.POST)
+        if add_category_form.is_valid():
+            add_category_form.save()
+            return JsonResponse({'message': 'Category added successfully'}, status=200)
+        return JsonResponse({'message': 'Error adding category'}, status=400)
 
 def cart(request):
     isLogged = request.session.get('isLogged')

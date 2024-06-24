@@ -4,6 +4,53 @@
 
 {% block style %}
     <link rel="stylesheet" href="{% static 'styles/add_book.css' %}" />
+    <style>
+      .message-container {
+          display: none;
+        }
+  
+      .message-container.show {
+          display: block; {% comment %} /* Show the container when needed */ {% endcomment %}
+      }
+      .message-container{
+        width: 350px;
+        background-color: white;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        z-index: 10;
+        transform: translate(-50%,-50%);
+        text-align: center;
+        padding: 0 30px 20px;
+        border-radius: 7px;
+        letter-spacing: 1px;
+      }
+      .popup_img{
+        width: 100px;
+        margin-top:-50px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0 , 0.2);
+        border-radius: 50%;
+      }
+      .popup_btn{
+        width: 100%;
+        background-color: var(--secondary);
+        color: white;
+        margin-top: 20px;
+        border: 0px;
+        height: 35px;
+        font-size: 18px;
+        letter-spacing: 1.5px;
+        text-align: center;
+        border-radius: 3px;
+      }
+      .container_popup_msg{
+        color: #767676;
+      }
+      
+      .message-container h2{
+        color: var(--secondary);
+      }
+  </style>
 {% endblock style %}
 
 {% block title %}
@@ -14,9 +61,16 @@
 {% block content %}
     <br />
     <br />
+    <div id="message-container" class="message-container">
+      <img class="popup_img" src="{% static 'images/popup/CorrectMark.png' %}">
+      <h2 id="popup_statue">Thank You!</h2>
+      <div class="container_popup_msg" id="container_popup_msg">
+      </div>
+      <button class="popup_btn" id="popup_btn">OK</button>
+  </div>{% comment %} message-container {% endcomment %}
     {% comment %} Add new books form {% endcomment %}
     <h2 class="main-title">Add New Book</h2>
-    <form class="AddingBook" method="POST" enctype="multipart/form-data">
+    <form class="AddingBook" id="addBookForm" method="POST" enctype="multipart/form-data">
       {% csrf_token %}
       {{form}}
       {% comment %}  <label for="bookId">Book ID:</label>
@@ -48,7 +102,7 @@
     <br />
     <br />
     <h2 class="main-title">Add Category</h2>
-    <form class="AddingBook" method="POST">
+    <form class="AddingBook" id="addCategoryForm" method="POST">
       {% csrf_token %}
       
       {{formCategory}}
@@ -57,5 +111,55 @@
     </form>
     <br />
     <br />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  const messageContainer = document.getElementById('message-container');
+  const container_popup_msg = document.getElementById('container_popup_msg');
+  const popup_btn = document.getElementById('popup_btn');
 
+  $(document).ready(function() {
+      function showPopupMessage(message) {
+          container_popup_msg.innerHTML = `<p>${message}</p>`;
+          messageContainer.style.display = 'block';
+      }
+
+      $('#addBookForm').on('submit', function(e) {
+          e.preventDefault();
+          const formData = new FormData(this);
+          $.ajax({
+              type: 'POST',
+              url: '{% url "add_book" %}',
+              data: formData,
+              processData: false,
+              contentType: false,
+              success: function(response) {
+                  showPopupMessage(response.message);
+              },
+              error: function(response) {
+                  showPopupMessage(response.responseJSON.message);
+              }
+          });
+      });
+
+      $('#addCategoryForm').on('submit', function(e) {
+          e.preventDefault();
+          const formData = $(this).serialize();
+          $.ajax({
+              type: 'POST',
+              url: '{% url "add_category" %}',
+              data: formData,
+              success: function(response) {
+                  showPopupMessage(response.message);
+              },
+              error: function(response) {
+                  showPopupMessage(response.responseJSON.message);
+              }
+          });
+      });
+
+      popup_btn.onclick = function() {
+          messageContainer.style.display = 'none';
+      }
+  });
+</script>
 {% endblock content %}

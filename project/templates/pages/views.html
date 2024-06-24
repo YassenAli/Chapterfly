@@ -76,7 +76,7 @@ Chapterfly - View
 
         <div class="row">
         <ul class="nav">
-            {% for cat in category|slice:'6' %}
+            {% for cat in category|slice:'3' %}
             <a href="#" class="nav-link bg-primary">
             <li class="nav-item cat{{cat.id}}">{{cat.name}}</li>
             </a>
@@ -184,7 +184,7 @@ Chapterfly - View
                     Join our community and start adding books with ease!
                 </p>
                 <div class="cta-buttons">
-                <a href="{% url 'add_book' %}" class="primary-button">Add New Book</a>
+                <a href="{% url 'render_add_book_page' %}" class="primary-button">Add New Book</a>
                 </div>
             </div>
         </div>

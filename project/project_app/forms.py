@@ -14,7 +14,16 @@ class CategoryForm(forms.ModelForm):
 class BookForm(forms.ModelForm):
     class Meta:
         model = Book
-        fields = '__all__'
+        # fields = '__all__'
+        fields = [
+            'name',
+            'price',
+            'description',
+            'author',
+            'category',
+            'img',
+            'status'
+        ]
 
         widgets = {
             'category': forms.Select(),
