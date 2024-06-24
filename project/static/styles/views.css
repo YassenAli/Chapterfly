@@ -1,11 +1,13 @@
 :root {
   --main-transition-duration: 0.3s;
+
   --primary: #333a73;
   --secondary: #378ce7;
   --accent1: #67c6e3;
   --accent2: #f9f2e7;
   --accent3: #f08080;
   --bgcolor: #effafc;
+
   --main-box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
 }
 * {
@@ -255,16 +257,19 @@ search {
 }
 /* End header */
 /********************************************* User *******************************************/
-.books {
-  display: flex;
-  justify-content: space-evenly;
+.featured .container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-bottom: 100px;
+  gap: 20px;
 }
-.books .book {
-  max-width: 200px;
+.featured .book {
   text-align: center;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
 }
 
 .add-to-cart {
@@ -278,6 +283,25 @@ search {
   padding: 10px;
   text-decoration: none;
   display: none; /* Hide it by default */
+}
+.status {
+  margin: 10px;
+}
+.status h5 {
+  display: inline;
+  margin-left: 20px;
+}
+
+.book .links {
+  background-color: var(--accent1);
+  padding: 5px;
+  border-radius: 4px;
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.book .links a i{
+  margin-left: 50px;
 }
 
 .box:hover .add-to-cart {
@@ -321,8 +345,8 @@ search {
 /********************************************* Admin *****************************************/
 #bookTable {
   border-collapse: collapse;
-  max-width: 90%;
-  margin: 0 auto;
+  width: 80%;
+  margin: 50px auto;
 }
 
 #bookTable th,
@@ -333,7 +357,7 @@ search {
 }
 
 #bookTable tr:nth-child(even) {
-  background-color: #f2f2f2;
+  background-color: var(--bgcolor);
 }
 
 #bookTable tr:hover {
@@ -343,13 +367,61 @@ search {
 #bookTable th {
   padding-top: 12px;
   padding-bottom: 12px;
-  text-align: left;
-  background-color: #58a3da;
+  font-weight: bold;
+  text-align: center;
+  background-color: var(--primary);
   color: white;
 }
-#edit:hover {
-  background-color: #4caf4fc3;
+
+.Buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 70%;
+}
+.EditDelete {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
+.delete{
+  background-color: #ef161a; 
+  margin-top: 20px;
+  right: 50%;
+  border: none; 
+  color: white; 
+  padding: 5px 5px;
+  text-align: center; 
+  text-decoration: none;
+  display: inline-block; 
+  font-size: 14px; 
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.delete:hover {
+  background-color: #ef161aa7; 
+  color: white;
+}
+
+.edit{
+  background-color: #4caf50; 
+  margin-top: 20px;
+  right: 50%;
+  border: none; 
+  color: white; 
+  padding: 5px 15px;
+  text-align: center; 
+  text-decoration: none;
+  display: inline-block; 
+  font-size: 14px; 
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+#edit:hover {
+  background-color: #46d74b;
+}
 
 /* End Admin */

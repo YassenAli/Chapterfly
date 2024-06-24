@@ -1,95 +1,49 @@
+function changePhoto() {
+    const changePhotoBtn = document.getElementById('changePhotoBtn');
+    const profileImg = document.getElementById('profileImg');
 
-function getCSRFToken() {
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    return csrfToken;
-}
+    changePhotoBtn.addEventListener('click', function() {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = 'image/*';
+        fileInput.style.display = 'none';
 
-function updateProfilePhoto() {
-    const form = document.getElementById('profilePhotoForm');
-    const formData = new FormData(form);
-    const csrfToken = getCSRFToken();
+        fileInput.addEventListener('change', function() {
+            const file = fileInput.files[0];
+            const reader = new FileReader();
 
-    fetch('/update_profile_photo_ajax/', {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': csrfToken
-        },
-        body: formData,
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.profile_picture_url) {
-            const profileImg = document.getElementById('profileImg');
-            profileImg.src = data.profile_picture_url;
-        } else {
-            console.error('Profile picture URL not found in response.');
-        }
-    })
-    .catch(error => console.error('Error:', error));
-}
+            reader.onload = function(event) {
+                profileImg.src = event.target.result;
+                // Save the profile picture to local storage
+                localStorage.setItem('profilePicture', event.target.result);
+            };
 
-document.addEventListener("DOMContentLoaded", function() {
-    const profilePhotoForm = document.getElementById('profilePhotoForm');
+            reader.readAsDataURL(file);
+        });
 
-    profilePhotoForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        updateProfilePhoto();
+        document.body.appendChild(fileInput);
+        fileInput.click();
+        document.body.removeChild(fileInput);
     });
-});
-
-
-function getBorrowedBooks() {
-    const borrowedBooksJSON = localStorage.getItem('BorrowedBooks');
-
-    let borrowedBooks = [];
-    if (borrowedBooksJSON) {
-        try {
-            borrowedBooks = JSON.parse(borrowedBooksJSON);
-        } catch (error) {
-            console.error('Error parsing borrowed books:', error);
-        }
-    }
-
-    return borrowedBooks;
 }
 
-function displayBorrowedBooks(books) {
-    const borrowedBooksList = document.getElementById('borrowed-books-list');
-
-    borrowedBooksList.innerHTML = '';
-
-    if (books.length === 0) {
-        borrowedBooksList.innerHTML = '<p class="empty">You have no borrowed books.</p>';
-        return;
+function getPhoto() {
+    const savedPhoto = localStorage.getItem('profilePicture');
+    if (savedPhoto) {
+        const userProfileImg = document.getElementById("profileImg");
+        userProfileImg.src = savedPhoto;
     }
-
-    books.forEach(book => {
-        const bookItem = document.createElement('div');
-        bookItem.className = 'borrowed-book-item';
-        bookItem.innerHTML = `
-            <h3>${book.name}</h3>
-            <p> <strong>Quantity: </strong>${book.quantity}</p>
-            `;
-
-        borrowedBooksList.appendChild(bookItem);
-    });
 }
 
 function getName(){
+    // function to get name from log in information
     const username = localStorage.getItem('userName');
     return username;
+    //continue
 }
-
-function logout(){
-    localStorage.removeItem( "loggedIn" );
-    window.location.href='main.html';
-}
-
-const borrowedBooks = getBorrowedBooks();
-displayBorrowedBooks(borrowedBooks);
 
 document.addEventListener("DOMContentLoaded", function() {
+    getPhoto();
     const usernameElement = document.getElementById("username-profile");
     const username = getName();
     if (username) {
@@ -99,5 +53,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
-const logoutButton = document.getElementById("log-out");
-logoutButton.addEventListener('click', logout);
+function logout(){
+    localStorage.removeItem( "loggedIn" );
+    window.location.href='main.html';
+}

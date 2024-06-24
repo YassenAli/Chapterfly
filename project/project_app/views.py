@@ -70,7 +70,7 @@ def cart(request):
     if request.method == 'POST':
         form = CheckoutForm(request.POST)
         if form.is_valid():
-            borrow_books(request, cart_book_ids)
+            borrow_book(request, cart_book_ids)
             return redirect('account')
         
     context = {
@@ -112,7 +112,6 @@ def main(request):
         'isLogged':isLogged,
         'is_admin':is_admin,
     }
-
     return render(request, 'pages/main.html' , context)
 
 def edit_book(request, book_id):
@@ -215,7 +214,6 @@ def wishlist(request):
     }
     return render(request, 'pages/wishlist.html', context)
 
-
 def get_profile_picture_ajax(request):
     if request.method == 'POST' and request.is_ajax():
         try:
@@ -246,8 +244,6 @@ def update_profile_photo_ajax(request):
             return JsonResponse({'errors': form.errors}, status=400)
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=400)
-
-
 
 def signup(request):
     if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
@@ -293,7 +289,6 @@ def render_login_signup_page(request):
             'loginForm': login_form
         })
 
-
 def account(request):
     isLogged = request.session.get('isLogged')
     is_admin = request.session.get('is_admin')
@@ -312,7 +307,7 @@ def account(request):
             profile_photo_form = ProfilePhotoForm(instance=user)
 
         borrowed_books = user.borrowed_books.filter(status='borrowed')
-
+        
         context = {
             'username': username,
             'profilePicture': profile_picture_url,
@@ -328,7 +323,6 @@ def account(request):
 def logout(request):
     request.session['isLogged'] = False
     return redirect('LoginSignup') 
-
 
 def navbarAdmin(request):
     isLogged = request.session.get('isLogged')
@@ -372,10 +366,10 @@ def borrow_books(request):
         username = request.session.get('username')
         user = Signup.objects.get(username=username)
         cart_books = user.cart.filter(status='available')
-
+        
         if not cart_books:
             return JsonResponse({'error': 'No available books in the cart'}, status=400)
-
+        
         for book in cart_books:
             book.status = 'borrowed'
             book.save()

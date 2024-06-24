@@ -1,33 +1,33 @@
-<!-- Start Footer -->
+{% comment %} <!-- Start Footer --> {% endcomment %}
 <footer id="footer">
-    <div class="container">
+  <div class="container">
       <div class="boxes">
-        <div class="box">
-          <h3> <i class="fa-solid fa-book-open icon"></i> Chapterfly</h3>
-          <p>Chapterfly was born out of a shared love for books and a desire to make them more accessible.</p>
-          <div class="social">
-            <a href="https://facebook.com"><img src="https://placehold.co/30x30" alt=""></a>
-            <a href="https://instagram.com"><img src="https://placehold.co/30x30" alt=""></a>
-            <a href="https://twitter.com"><img src="https://placehold.co/30x30" alt=""></a>
+          <div class="box">
+              <h3> <i class="fa-solid fa-book-open icon"></i> Chapterfly</h3>
+              <p>Chapterfly was born out of a shared love for books and a desire to make them more accessible.</p>
+              <div class="social">
+                  <a href="https://facebook.com"><img src="https://placehold.co/30x30" alt=""></a>
+                  <a href="https://instagram.com"><img src="https://placehold.co/30x30" alt=""></a>
+                  <a href="https://twitter.com"><img src="https://placehold.co/30x30" alt=""></a>
+              </div>
           </div>
-        </div>
-        <div class="box">
-          <h4>EXPLORE</h4>
-          <ul>
-            <li><a href="views.html">Programming</a></li>
-            <li><a href="views.html">Fantasy</a></li>
-            <li><a href="views.html">Comedy</a></li>
-          </ul>
-        </div>
-        <div class="box">
-          <h4>ABOUT</h4>
-          <p>We believe that stories have the power to transport us, teach us, and connect us.</p>
-        </div>
+          <div class="box">
+              <h4>EXPLORE</h4>
+              <ul>
+                  {% for cat in category %}
+                      <li><a href="{% url 'view' %}">{{ cat.name }}</a></li>
+                  {% endfor %}
+              </ul>
+          </div>
+          <div class="box">
+              <h4>ABOUT</h4>
+              <p>We believe that stories have the power to transport us, teach us, and connect us.</p>
+          </div>
       </div>
       <div class="bottom-line">
-        <p>© 2024 Chapterfly</p>
-        <p>All rights reserved.</p>
+          <p>© 2024 Chapterfly</p>
+          <p>All rights reserved.</p>
       </div>
-    </div>
-  </footer>
-  <!-- End Footer -->
+  </div>
+</footer>
+  {% comment %} <!-- End Footer --> {% endcomment %}
