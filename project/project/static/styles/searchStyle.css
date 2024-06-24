@@ -40,9 +40,10 @@
   justify-content: center;
 }
 .row .nav a{
-    color: white;
-    font-size: 18px;
-    font-weight: bold;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  margin: 5px;
 }
 .row .nav a li {
   margin-right: 40px;

@@ -76,7 +76,7 @@ Chapterfly - View
 
         <div class="row">
         <ul class="nav">
-            {% for cat in category|slice:'3' %}
+            {% for cat in category %}
             <a href="#" class="nav-link bg-primary">
             <li class="nav-item cat{{cat.id}}">{{cat.name}}</li>
             </a>
