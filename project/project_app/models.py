@@ -54,6 +54,7 @@ class Signup(models.Model):
     profilePicture = models.ImageField(default='default.jpg', upload_to='profilePictures')
     wishlist = models.ManyToManyField(Book, related_name='wishlist_items')
     cart = models.ManyToManyField(Book, related_name='cart_items')
+    borrowed_books = models.ManyToManyField(Book, related_name='borrowed_books', blank=True)
 
     def __str__(self):
         return self.username
