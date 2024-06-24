@@ -214,36 +214,6 @@ def wishlist(request):
     }
     return render(request, 'pages/wishlist.html', context)
 
-def get_profile_picture_ajax(request):
-    if request.method == 'POST' and request.is_ajax():
-        try:
-            data = json.loads(request.body)
-            username = data.get('username')
-            if not username:
-                return JsonResponse({'error': 'Username not provided'}, status=400)
-
-            user = Signup.objects.get(username=username)
-            profile_picture_url = user.profilePicture.url
-            return JsonResponse({'profile_picture_url': profile_picture_url})
-        except Signup.DoesNotExist:
-            return JsonResponse({'error': 'User does not exist'}, status=404)
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)
-    return JsonResponse({'error': 'Invalid request'}, status=400)
-
-def update_profile_photo_ajax(request):
-    if request.method == 'POST':
-        form = ProfilePhotoForm(request.POST, request.FILES)
-        if form.is_valid():
-            user = request.user
-            user.profile_photo = form.cleaned_data['profile_photo']
-            user.save()
-            profile_picture_url = user.profile_photo.url
-            return JsonResponse({'profile_picture_url': profile_picture_url})  # Return the URL in the JSON response
-        else:
-            return JsonResponse({'errors': form.errors}, status=400)
-    else:
-        return JsonResponse({'error': 'Invalid request method'}, status=400)
 
 def signup(request):
     if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
