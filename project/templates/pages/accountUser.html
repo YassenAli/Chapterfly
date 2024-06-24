@@ -1,57 +1,114 @@
 {% extends 'base.html' %}
+
 {% load static %}
 
-{% block content %}
-    <title>Account</title>
-    <meta name="csrf-token" content="{{ csrf_token }}">
+{% block style %}
     <link rel="stylesheet" href="{% static 'styles/account.css' %}">
-    <div id="bd-title">
-        <h2 class="main-title">Profile</h2>
-    </div>
-    <div class="profileBody container">
-        <div id="userProfile" class="container">
-            <div id="profileSection">
-               <form style="width: 120px" method="post" enctype="multipart/form-data" id="profilePhotoForm">
-                    {% csrf_token %}
-                    <div>
-                        {% if profilePicture %}
-                            <img src="{{ profilePicture }}" alt="Profile Picture" ,
-                                 style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; position: relative;">
-                            <br>
+    <style>
+        #borrowed-books {
+            margin-top: 2%;
+        }
 
-                        {% endif %}
-                        <label style="padding: 5px; background-color: #57a4f6; color: #fff; border: none; border-radius: 5px; cursor: pointer;
-    margin: 1%;" for="id_profilePicture">Change Photo</label><input type="file"
-                                                                    name="profilePicture"
-                                                                    accept="image/*"
-                                                                    id="id_profilePicture"
-                                                                    style="visibility: hidden">
-                    </div>
-                    <button type="submit">Save Photo</button>
-                </form>
+        .borrowed-title {
+            text-align: center;
+            color: #333a73;
+            margin-bottom: 20px;
+        }
 
-                <h2 id="username-profile">{{ username|default:'user'|capfirst }}</h2>
+        #borrowed-books-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            background-color: #effafc;
+            padding: 20px;
+            border: 2px solid #333a73;
+            border-radius: 5px;
+        }
 
-            </div>
-            <!-- Profile photo upload form -->
+        .borrowed-book {
+            background-color: #57a4f6;
+            color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            width: 250px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
 
+        .borrowed-book:hover {
+            transform: translateY(-5px);
+        }
+
+        .borrowed-book h3 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .borrowed-book p {
+            font-size: 1em;
+            margin: 5px 0;
+        }
+    </style>
+{% endblock %}
+
+{% block title %}
+    Account
+{% endblock %}
+
+{% block content %}
+<div id="bd-title">
+    <h2 class="main-title">Profile</h2>
+</div>
+<div class="profileBody container">
+    <div id="userProfile" class="container">
+        <div id="profileSection">
+            <form style="width: 120px" method="post" enctype="multipart/form-data" id="profilePhotoForm">
+                {% csrf_token %}
+                <div>
+                    {% if profilePicture %}
+                        <img src="{{ profilePicture }}" alt="Profile Picture" ,
+                             style="width: 100px; height: 100px; border-radius: 50%; overflow: hidden; position: relative;">
+                        <br>
+                    {% endif %}
+                    <label style="padding: 5px; background-color: #57a4f6; color: #fff; border: none; border-radius: 5px; cursor: pointer; margin: 1%;" for="id_profilePicture">Change Photo</label>
+                    <input type="file" name="profilePicture" accept="image/*" id="id_profilePicture" style="visibility: hidden">
+                </div>
+                <button type="submit">Save Photo</button>
+            </form>
+            <h2 id="username-profile">{{ username|default:'user'|capfirst }}</h2>
         </div>
+            {% comment %} <!-- Profile photo upload form --> {% endcomment %}
     </div>
-    <h3 id="manage-book" class="main-title">Your books</h3>
-    <div class="profileBody">
-        <div id="manageBooks" class="container"></div>
-        <div class="container" id="bookshelf">
+</div>
+{% if not is_admin %}
+<h3 id="manage-book" class="main-title">Your books</h3>
+<div class="profileBody">
+    <div id="manageBooks" class="container"></div>
+    <div class="container" id="bookshelf">
+        {% if borrowed_books %}
             <section id="borrowed-books">
                 <h2 class="borrowed-title">Borrowed Books</h2>
                 <div id="borrowed-books-list" class="container">
-                    <!-- The books will be dynamically added here -->
+                    {% for book in borrowed_books %}
+                        <div class="borrowed-book">
+                            <h3>{{ book.name }}</h3>
+                            <p>{{ book.author }}</p>
+                            <p>Status: {{ book.status }}</p>
+                        </div>
+                    {% endfor %}
                 </div>
             </section>
-        </div>
+        {% else %}
+            <p class="empty">You don't have borrowed books!</p>
+        {% endif %}
     </div>
-    <div class="container" id="bookshelf">
-        <button id="log-out" onclick="window.location.href = '{% url 'logout' %}'">Log Out</button>
-    </div>
-    <script src="{% static 'javascript/account.js' %}"></script>
+</div>
+{% endif %}
+<div class="container" id="bookshelf">
+    <button id="log-out" onclick="window.location.href = '{% url 'logout' %}'">Log Out</button>
+</div>
+    {% comment %} <script src="{% static 'javascript/account.js' %}"></script> {% endcomment %}
 
 {% endblock content %}
