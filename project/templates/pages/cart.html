@@ -3,7 +3,54 @@
 {% load static %}
 
 {% block style %}
-<link rel="stylesheet" href="{% static 'styles/MyCart.css' %}"/>
+    <link rel="stylesheet" href="{% static 'styles/MyCart.css' %}"/>
+    <style>
+        .message-container {
+            display: none;
+          }
+
+        .message-container.show {
+            display: block; {% comment %} /* Show the container when needed */ {% endcomment %}
+        }
+        .message-container{
+          width: 350px;
+          background-color: white;
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          z-index: 10;
+          transform: translate(-50%,-50%);
+          text-align: center;
+          padding: 0 30px 20px;
+          border-radius: 7px;
+          letter-spacing: 1px;
+        }
+        .popup_img{
+          width: 100px;
+          margin-top:-50px;
+          box-shadow: 0 2px 5px rgba(0, 0, 0 , 0.2);
+          border-radius: 50%;
+        }
+        .popup_btn{
+          width: 100%;
+          background-color: var(--secondary);
+          color: white;
+          margin-top: 20px;
+          border: 0px;
+          height: 35px;
+          font-size: 18px;
+          letter-spacing: 1.5px;
+          text-align: center;
+          border-radius: 3px;
+        }
+        .container_popup_msg{
+          color: #767676;
+        }
+
+        .message-container h2{
+          color: var(--secondary);
+        }
+    </style>
 {% endblock %}
 
 {% block title %}
@@ -14,6 +61,13 @@ My Cart
 <div>
     <br>
     <br>
+    <div id="message-container" class="message-container">
+        <img class="popup_img" src="{% static 'images/popup/CorrectMark.png' %}">
+        <h2 id="popup_statue">Thank You!</h2>
+        <div class="container_popup_msg" id="container_popup_msg">
+        </div>
+        <button class="popup_btn" id="popup_btn">OK</button>
+    </div>{% comment %} message-container {% endcomment %}
     <div class="main-container container">
             <div id="content" class="col-sm-12 cart_items">
                 <h2 class="title main-title">Books Cart</h2>
@@ -135,7 +189,7 @@ My Cart
                                     <p class="mb-2">Total </p>
                                     <p class="mb-2" id="checkout_price">{% if total_price %} {{ total_price }} {% else %} 00.00 {% endif %} LE</p>
                                 </div>
-        
+
                                 <button type="submit" data-mdb-button-init data-mdb-ripple-init
                                         class="btn btn-info btn-block btn-lg btn-checkout">
                                     <div class="d-flex justify-content-between">
@@ -171,5 +225,40 @@ My Cart
             }
         });
     });
+
+    const messageContainer = document.getElementById('message-container');
+    const container_popup_msg = document.getElementById('container_popup_msg');
+    const popup_btn = document.getElementById('popup_btn');
+
+    function showPopupMessage(message) {
+        container_popup_msg.innerHTML = `<p>${message}</p>`;
+        messageContainer.style.display = 'block';
+    }
+
+    $(document).on('submit', '#checkout-form', function(event) {
+        event.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: '{% url "borrow_books" %}',
+            data: {
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function(response) {
+                if (response.success) {
+                    $('#cart_cont').load(location.href + ' #cart_cont');
+                    $('#checkout-form').load(location.href + ' #checkout-form');
+                    $('#cart_number').load(location.href + ' #cart_number');
+                    $('#cart_price').load(location.href + ' #cart_price');
+                    showPopupMessage('Checkout successful and books borrowed!');
+                } else {
+                    showPopupMessage('an error occured!');
+                }
+            }
+        });
+    });
+
+    popup_btn.onclick = function() {
+        messageContainer.style.display = 'none';
+    }
 </script>
 {% endblock content %}
