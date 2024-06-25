@@ -4,31 +4,32 @@ from .forms import BookForm, CategoryForm, CheckoutForm, EditBookForm , SignupFo
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.contrib import messages
 import json
-from django.db.models import Sum
+from django.db.models import Sum , Q
 
 # Create your views here.
 
 def view(request):
     search = Book.objects.all()
-    title = None
-    if 'search-name' in request.GET:
-        title = request.GET['search-name']
-        if title:
-            search = search.filter(name__icontains=title)
+    query = request.GET.get('search')
+
+    if query:
+        search = search.filter(Q(name__icontains=query) | Q(author__icontains=query))
 
     isLogged = request.session.get('isLogged')
     is_admin = request.session.get('is_admin')
 
-    if isLogged is False :
+    if isLogged is False:
         return redirect('LoginSignup')
 
     context = {
         'category': Category.objects.all(),
         'books': search,
-        'is_admin' : is_admin,
-        'isLogged' : isLogged,
+        'is_admin': is_admin,
+        'isLogged': isLogged,
+        'search_query': query,
     }
     return render(request, 'pages/views.html', context)
+
 
 
 def render_add_book_page(request):

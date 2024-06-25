@@ -12,7 +12,7 @@
       }
 
     .message-container.show {
-        display: block; {% comment %} /* Show the container when needed */ {% endcomment %}
+        display: block;
     }
     .message-container{
       width: 350px;
@@ -61,10 +61,13 @@ Chapterfly - View
 
 {% block content %}
         
+
+        {%if not is_admin%}
+
         {% comment %} SEARCH FORM  {% endcomment %}
         <form method="GET" class="form-inline" action="" id="searchBar">
             <div class="input-group">
-                <input type="search" class="form-control" name="search-name" onkeyup="showResults(this.value)" title="Search for book">
+                <input type="search" class="form-control" name="search-query" onkeyup="showResults(this.value)" title="Search for book">
                 <div class="input-group-append">
                     <button class="btn" type="submit"><i class="fas fa-search"></i></button>
                 </div>
@@ -83,7 +86,7 @@ Chapterfly - View
             {% endfor %}
         </ul>
 
-        {%if not is_admin%}
+
         <div id="message-container" class="message-container">
             <img class="popup_img" src="{% static 'images/popup/CorrectMark.png' %}">
             <h2 id="popup_statue">Thank You!</h2>
@@ -140,8 +143,8 @@ Chapterfly - View
     </div>
     </div>
 {% else %}
-    <div id="admin" class="hidden">
-        <h2 class="main-title">Available Books</h2>
+    <div id="admin" class="hidden">  <!--admin start from here-->
+        <h2 class="main-title" style="margin-top: 50px;">Available Books</h2>
         <table id="bookTable">
             <thead>
                 <tr>
@@ -189,7 +192,8 @@ Chapterfly - View
             </div>
         </div>
     </div>
-    {%endif%}
+    {%endif%}  <!--admin end here-->
+
     {% comment %} Scripts {% endcomment %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
@@ -230,7 +234,7 @@ Chapterfly - View
                         
                     }
                 };
-        xhttp.open("GET", "/view/?search-name=" + str, true);
+        xhttp.open("GET", "/view/?search=" + str, true);
         xhttp.send();
     }
 
