@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block style %}
-    {% comment %} <link rel="stylesheet" href="{% static 'styles/add_book.css' %}" /> {% endcomment %}
+    <link rel="stylesheet" href="{% static 'styles/addingBook.css' %}" />
 {% endblock style %}
 
 {% block title %}
@@ -10,21 +10,17 @@
 {% endblock %}
 
 {% block content %}
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Book</title>
-</head>
-<body>
-    <h1>Edit Book</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Save Changes</button>
+    <br />
+    <br />
+    <h2 class="main-title">Edit Book</h2>
+    <form class="AddingBook" id="addBookForm" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{form}}
+      <br />
+      <button type="submit" class="AddingBookBtn" id="AddingBookBtn" name="add_book">
+        Save Changes
+      </button>
     </form>
-</body>
-</html>
+    <br />
+    <br />
 {% endblock %}

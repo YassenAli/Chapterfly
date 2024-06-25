@@ -58,6 +58,15 @@ class EditBookForm(forms.ModelForm):
     class Meta:
         model = Book
         fields = ['description', 'name', 'author', 'price', 'category', 'status']
+        
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Book Title', 'class': 'form_field'}),
+            'author': forms.TextInput(attrs={'placeholder': 'Author Name', 'class': 'form_field'}),
+            'category': forms.Select(attrs={'class': 'form_field'}),
+            'status': forms.Select(attrs={'class': 'form_field'}),
+            'price': forms.NumberInput(attrs={'placeholder': 'Price', 'class': 'form_field'}),
+            'description': forms.Textarea(attrs={'class': 'form_field description', 'placeholder': 'Description...'}),
+        }
 
 class SignupForm(forms.ModelForm):
     class Meta:
