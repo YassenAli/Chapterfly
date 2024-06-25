@@ -76,7 +76,9 @@ Chapterfly - View
         <div id="search-results">
              {% comment %} search results will be displayed here  {% endcomment %}
         </div>
+        {% endif %}
 
+        {% comment %} Category {% endcomment %}
         <div class="row">
         <ul class="nav">
             {% for cat in category %}
@@ -86,6 +88,7 @@ Chapterfly - View
             {% endfor %}
         </ul>
 
+        {%if not is_admin%}
 
         <div id="message-container" class="message-container">
             <img class="popup_img" src="{% static 'images/popup/CorrectMark.png' %}">

@@ -16,10 +16,12 @@ class Command(BaseCommand):
         # categories = ['Fiction', 'Non-Fiction', 'Science', 'History', 'Fantasy', 'Biography']
         category_objects = []
         for category_name in categories:
-            category = Category.objects.get_or_create(name=category_name)
+            category, created = Category.objects.get_or_create(name=category_name)
+            # Unpacking the tuple to get the Category instance
             category_objects.append(category)
 
-        for _ in range(10):
+        numOfBooks = 10
+        for _ in range(numOfBooks):
             # image_url = fake.image_url()
             image_url = f"https://picsum.photos/200/300"
             image_response = urlopen(image_url)
@@ -31,7 +33,7 @@ class Command(BaseCommand):
                 price=round(random.uniform(10, 100), 2),
                 description=fake.text(max_nb_chars=200),
                 author=fake.name(),
-                category=random.choice(category_objects),
+                category=random.choice(category_objects),  # This now correctly assigns a Category instance
                 status=random.choice(['available', 'borrowed'])
             )
 
@@ -39,4 +41,4 @@ class Command(BaseCommand):
 
             book.img.save(image_name, ContentFile(image_file.getvalue()), save=True)
 
-        self.stdout.write(self.style.SUCCESS('Successfully generated 10 books'))
+        self.stdout.write(self.style.SUCCESS(f'Successfully generated {numOfBooks} books'))

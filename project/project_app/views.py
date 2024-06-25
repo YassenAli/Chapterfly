@@ -30,8 +30,6 @@ def view(request):
     }
     return render(request, 'pages/views.html', context)
 
-
-
 def render_add_book_page(request):
     context = {
         'form': BookForm(),
@@ -63,7 +61,6 @@ def cart(request):
     total_price = user_cart.aggregate(total_price=Sum('price'))['total_price'] or 0
     count_items = user_cart.count()
     cart_book_ids = [book.id for book in user_cart]
-
     
     if isLogged is False :
         return redirect('LoginSignup')
@@ -71,7 +68,7 @@ def cart(request):
     if request.method == 'POST':
         form = CheckoutForm(request.POST)
         if form.is_valid():
-            borrow_book(request, cart_book_ids)
+            borrow_books(request)
             return redirect('account')
         
     context = {
@@ -214,7 +211,6 @@ def wishlist(request):
         'is_admin':is_admin,
     }
     return render(request, 'pages/wishlist.html', context)
-
 
 def signup(request):
     if request.method == 'POST' and request.headers.get('X-Requested-With') == 'XMLHttpRequest':
