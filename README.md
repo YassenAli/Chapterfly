@@ -42,7 +42,7 @@ Follow these steps to set up Chapterfly on your local machine:
 ### Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/chapterfly.git
+   git clone https://github.com/YassenAli/chapterfly.git
 
 2. Run the python server
    ```bash
